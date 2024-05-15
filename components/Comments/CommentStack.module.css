@@ -1,0 +1,24 @@
+.comment {
+    display: grid; /* Setting the comment area to have grid display */
+    grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+    grid-gap: var(--mantine-spacing-md); /* Specify the gap between items */
+    width: 800px;
+}
+
+@media (max-width: 768px) {
+    .comment {
+        grid-template-columns: 1fr; /* Stack in one column on smaller screens */
+    }
+}
+
+.body {
+    padding-left: rem(54px);
+    padding-top: var(--mantine-spacing-sm);
+    font-size: var(--mantine-font-size-sm);
+}
+
+.content {
+& > p:last-child {
+      margin-bottom: 0;
+  }
+}
