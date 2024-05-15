@@ -5,7 +5,7 @@ import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import Script from 'next/script';
 import { theme } from '@/theme';
 import Providers from './providers';
-// import InitAppCheck from '@/app/InitAppCheck';
+import InitAppCheck from '@/app/InitAppCheck';
 
 export const metadata = {
   title: 'Mantine Next.js template',
@@ -16,9 +16,8 @@ export default function RootLayout({ children }: { children: any }) {
   return (
     <html lang="en">
     <head>
-      <Script src="https://www.google.com/recaptcha/enterprise.js?render=6LeW3NkpAAAAAOudrw8NGsZRg59v5SMSabR51EwV" />
       <ColorSchemeScript />
-      <link rel="shortcut icon" href="/favicon.svg" />
+      <link rel="shortcut icon" href="/vercel.svg" />
       <meta
         name="viewport"
         content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
@@ -28,9 +27,9 @@ export default function RootLayout({ children }: { children: any }) {
     <Providers>
       <MantineProvider theme={theme}>
         {children}
-        {/*<Suspense fallback={null}>*/}
-        {/*  <InitAppCheck />*/}
-        {/*</Suspense>*/}
+        <Suspense fallback={null}>
+          <InitAppCheck />
+        </Suspense>
       </MantineProvider>
     </Providers>
     </body>
