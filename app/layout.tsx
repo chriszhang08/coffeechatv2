@@ -1,10 +1,10 @@
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 import React, { Suspense } from 'react';
 import { MantineProvider, ColorSchemeScript } from '@mantine/core';
 import Script from 'next/script';
 import { theme } from '@/theme';
 import Providers from './providers';
-import '@mantine/dates/styles.css';
 // import InitAppCheck from '@/app/InitAppCheck';
 
 export const metadata = {
