@@ -10,28 +10,19 @@ import fakeAvailability from '@/data/mock-data/fakeAvailability';
 import { usePublicCoachData } from '@/hooks/useCoachData';
 import { Coach } from '@/types/firestore/coaches/coach';
 
-function UpdateAvailabilitywParams() {
+function UpdateAvailabilityParams() {
   const searchParams = useSearchParams();
   const coachId = searchParams.get('coachId');
 
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [coach, setCoach] = useState<Coach | null>(null);
 
-  if (!coachId) {
-    return null;
-  }
+  const coachData = usePublicCoachData(coachId);
 
-  // Fetch coach data
-  const coachQuery = usePublicCoachData(coachId);
-
-  // Update name when data is loaded successfully
   useEffect(() => {
-    if (coachQuery.data) {
-      console.log(coachQuery.data);
-      setCoach(coachQuery.data);
-      setIsDataLoaded(true);
-    }
-  }, [coachQuery.data]);
+    setCoach(coachData);
+    setIsDataLoaded(true);
+  }, [coachData]);
 
   const mutation = useMutation({
     mutationFn: (availabilityArray: string[]) =>
@@ -71,7 +62,7 @@ function Page() {
       }}
       >
         <Suspense>
-          <UpdateAvailabilitywParams />
+          <UpdateAvailabilityParams />
         </Suspense>
       </div>
     </>

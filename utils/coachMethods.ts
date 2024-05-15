@@ -5,8 +5,11 @@ import { db } from '@/firebase.config';
 import { getFirestoreDoc } from '@/utils/firestoreAnalytics';
 
 export async function getPublicCoachData(
-  coachId: string,
+  coachId: string | null,
 ): Promise<Coach> {
+  if (!coachId) {
+    return {} as Coach;
+  }
   const docRef = doc(db, 'coaches', coachId);
   const docSnap = await getFirestoreDoc(docRef);
   if (docSnap.exists()) {
@@ -26,8 +29,11 @@ export async function getComments(coachId: string): Promise<Comment[]> {
 }
 
 export async function updateCoachAvailability(
-  coachId: string,
+  coachId: string | null,
   availability: string[],
 ): Promise<void> {
+  if (!coachId) {
+    return;
+  }
   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
 }

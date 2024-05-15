@@ -13,16 +13,18 @@ export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
   const [visibleComments, setVisibleComments] = useState(2); // Initial number of visible comments
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  // Fetch coach data
-  const commentQuery = useCoachCommentData(coachId);
-  const totalComments = commentQuery.data ? commentQuery.data.length : 0;
+  // Fetch comment data
+  // TODO test this, it might be broken - what if all the comments don't load onComponentDidMount?
+  const comments = useCoachCommentData(coachId);
 
-  const comments = commentQuery.data?.slice(0, visibleComments).map((commentObj, id) => (
+  const totalComments = comments ? comments.length : 0;
+
+  const commentDivs = comments?.slice(0, visibleComments).map((commentObj, id) => (
     <CommentHtml key={id} comment={commentObj} />
   ));
 
   const loadMoreComments = () => {
-    setVisibleComments(commentQuery.data ? commentQuery.data.length : 0); // Load all the comments
+    setVisibleComments(comments ? comments.length : 0); // Load all the comments
   };
 
   const toggleCollapse = () => {
@@ -39,7 +41,7 @@ export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
         <Text size="sm">{totalComments} reviews</Text>
       </Stack>
       <SimpleGrid className={classes.comment} cols={2}>
-        {comments}
+        {commentDivs}
       </SimpleGrid>
       {visibleComments < totalComments && (
         <Center>

@@ -18,24 +18,20 @@ function CoachProfileSearch() {
 
   const coachId = searchParams.get('coachId');
 
-  if (!coachId) {
-    return null;
-  }
+  const coachData = usePublicCoachData(coachId);
 
-  // Fetch coach data
-  const coachQuery = usePublicCoachData(coachId);
-
-  // Update name when data is loaded successfully
   useEffect(() => {
-    if (coachQuery.data) {
-      setCoach(coachQuery.data);
-      setIsDataLoaded(true);
-    }
-  }, [coachQuery.data]);
+    setCoach(coachData);
+    setIsDataLoaded(true);
+  }, [coachData]);
 
   if (!isDataLoaded) {
     // TODO fix this loading spinner
     return <div>Loading...</div>;
+  }
+
+  if (!coach || !coachId) {
+    return <div>Coach not found</div>;
   }
 
   return (
