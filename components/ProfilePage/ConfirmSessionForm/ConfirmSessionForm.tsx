@@ -44,27 +44,19 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     },
   });
 
-  const [coachData, setCoachData] = useState<Coach | null>(null);
+  const [coach, setCoach] = useState<Coach | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const icon = <IconInfoCircle />;
 
   const router = useRouter();
 
-  if (!coachId || !time) {
-    return <div>Loading..</div>;
-  }
+  const coachData = usePublicCoachData(coachId);
 
-  // Fetch coach data
-  const coachQuery = usePublicCoachData(coachId);
-
-  // Update name when data is loaded successfully
   useEffect(() => {
-    if (coachQuery.data) {
-      setCoachData(coachQuery.data);
-      setIsDataLoaded(true);
-    }
-  }, [coachQuery.data]);
+    setCoach(coachData);
+    setIsDataLoaded(true);
+  }, [coachData]);
 
   if (!isDataLoaded) {
     // TODO fix this loading spinner
@@ -81,7 +73,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
         },
         // TODO make the json object more dynamic
         body: JSON.stringify({
-          coachName: coachData?.name,
+          coachName: coach?.name,
           date: 'Wednesday, April 10',
           time,
           link: 'https://meet.google.com/abc-123-def',
@@ -128,9 +120,9 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           <Text size="xs">Wednesday, April 10</Text>
           <Text size="xs">{time}</Text>
           <Title order={5}>Coach:</Title>
-          <Text size="xl">{coachData?.name}</Text>
+          <Text size="xl">{coach?.name}</Text>
           <Title order={5}>Email:</Title>
-          <Text size="xl">{coachData?.email}</Text>
+          <Text size="xl">{coach?.email}</Text>
           <Title order={5}>Time:</Title>
           <Text size="xl">{time}</Text>
           <Title order={5}>Price:</Title>
