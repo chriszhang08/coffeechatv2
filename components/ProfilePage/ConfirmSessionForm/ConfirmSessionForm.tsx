@@ -52,7 +52,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const router = useRouter();
 
   if (!coachId || !time) {
-    return null;
+    return <div>Loading..</div>;
   }
 
   // Fetch coach data

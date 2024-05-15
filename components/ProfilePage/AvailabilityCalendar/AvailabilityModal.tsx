@@ -71,7 +71,7 @@ export function AvailabilityModal({
       <Grid.Col span={4} key={index}>
         {/*TODO right now pass the time and coachId as query params, but this should be changed to a POST request*/}
         <Link
-          href={`/profile/confirmsesh?coachId=${coachId}time=${convertToDate(date.getFullYear(), date.getMonth(), date.getDate(), index)}type=${typeofSession}`}
+          href={`/profile/confirmsesh?coachId=${coachId}&time=${convertToDate(date.getFullYear(), date.getMonth(), date.getDate(), index)}&type=${typeofSession}`}
           passHref
         >
           <Button
