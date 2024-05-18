@@ -10,25 +10,34 @@ import {
   Alert,
   Container,
 } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import {useForm} from '@mantine/form';
 import {
   collection,
   addDoc,
 } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { IconInfoCircle } from '@tabler/icons-react';
-import { usePublicCoachData } from '@/hooks/useCoachData';
-import { Coach } from '@/types/firestore/coaches/coach';
+import {useRouter} from 'next/navigation';
+import React, {useEffect, useState} from 'react';
+import {IconInfoCircle} from '@tabler/icons-react';
+import {usePublicCoachData} from '@/hooks/useCoachData';
+import {Coach} from '@/types/firestore/coaches/coach';
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
   time: string | null;
+  type: string | null;
+}
+
+function isoStringToDate(isoString: string | null): Date {
+  if (isoString === null) {
+    return new Date();
+  }
+  return new Date(isoString);
 }
 
 const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
                                                                  coachId,
                                                                  time,
+                                                                 type
                                                                }) => {
   const form = useForm({
     initialValues: {
@@ -47,7 +56,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const [coach, setCoach] = useState<Coach | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
-  const icon = <IconInfoCircle />;
+  const icon = <IconInfoCircle/>;
 
   const router = useRouter();
 
@@ -63,6 +72,8 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     return <div>Loading...</div>;
   }
 
+  const date = isoStringToDate(time);
+
   const handleSubmit = async () => {
     // TODO sanitize input
     try {
@@ -74,8 +85,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
         // TODO make the json object more dynamic
         body: JSON.stringify({
           coachName: coach?.name,
-          date: 'Wednesday, April 10',
-          time,
+          date: date.toISOString(),
           link: 'https://meet.google.com/abc-123-def',
           sessionDetails: 'This is a test session',
           price: 100,
@@ -105,34 +115,34 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       <Title
         order={2}
         size="h1"
-        style={{ fontFamily: 'Greycliff CF, var(--mantine-font-family)' }}
+        style={{fontFamily: 'Greycliff CF, var(--mantine-font-family)'}}
         fw={900}
         ta="center"
       >
         Confirm Session
       </Title>
-      <SimpleGrid cols={2}>
-        <Card withBorder radius="md" style={{ width: 400 }}>
-          <Title order={3} c="dimmed">
+      <SimpleGrid cols={2} style={{ paddingTop: 50 }}>
+        <Card withBorder radius="md" style={{width: 400}}>
+          <Title order={2}>
             Session Information
           </Title>
           <Title order={5}>Date:</Title>
-          <Text size="xs">Wednesday, April 10</Text>
-          <Text size="xs">{time}</Text>
+          <Text size="lg">{date.toDateString()}</Text>
           <Title order={5}>Coach:</Title>
-          <Text size="xl">{coach?.name}</Text>
+          <Text size="lg">{coach?.name}</Text>
           <Title order={5}>Email:</Title>
-          <Text size="xl">{coach?.email}</Text>
+          <Text size="lg">{coach?.email}</Text>
           <Title order={5}>Time:</Title>
-          <Text size="xl">{time}</Text>
+          {/*TODO change the time to add the time zone and make it more readable*/}
+          <Text size="lg">{date.toLocaleTimeString()}</Text>
           <Title order={5}>Price:</Title>
-          <Text size="xl" />
+          <Text size="lg"/>
           <Alert variant="light" color="blue" icon={icon}>
             The Google Meet link will be generated after the coach confirms the session.
           </Alert>
         </Card>
 
-        <Container style={{ width: 300 }}>
+        <Container style={{width: 300}}>
           <TextInput
             label="Name"
             placeholder="Your name"

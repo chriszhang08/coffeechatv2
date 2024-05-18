@@ -10,8 +10,9 @@ function ConfirmSessionParams() {
 
   const coachId = searchParams.get('coachId');
   const time = searchParams.get('time');
+  const type = searchParams.get('type');
 
-  return <ConfirmSessionForm coachId={coachId} time={time} />;
+  return <ConfirmSessionForm coachId={coachId} time={time} type={type} />;
 }
 
 function Page() {

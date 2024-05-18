@@ -1,9 +1,8 @@
-import { Button, Grid } from '@mantine/core';
+import {Button, Grid} from '@mantine/core';
 import React from 'react';
 import Link from 'next/link';
 
-function convertToDate(year: number, month: number, day: number, index: number): string {
-  const date = new Date(year, month, day);
+function convertToDate(date : Date, index: number): string {
   const hour = Math.floor(index / 4);
   const minute = (index % 4) * 15;
 
@@ -15,6 +14,14 @@ function convertToDate(year: number, month: number, day: number, index: number):
     minute: '2-digit',
     hour12: true,
   });
+}
+
+function timeToDatetime(d: Date, index: number): string {
+  const hour = Math.floor(index / 4);
+  const minute = (index % 4) * 15;
+
+  d.setHours(hour, minute, 0, 0);
+  return d.toISOString();
 }
 
 // Filter the availability based on the type of session
@@ -71,7 +78,7 @@ export function AvailabilityModal({
       <Grid.Col span={4} key={index}>
         {/*TODO right now pass the time and coachId as query params, but this should be changed to a POST request*/}
         <Link
-          href={`/profile/confirmsesh?coachId=${coachId}&time=${convertToDate(date.getFullYear(), date.getMonth(), date.getDate(), index)}&type=${typeofSession}`}
+          href={`/profile/confirmsesh?coachId=${coachId}&time=${timeToDatetime(date, index)}&type=${typeofSession}`}
           passHref
         >
           <Button
@@ -81,7 +88,7 @@ export function AvailabilityModal({
               paddingRight: 'unset',
             }}
           >
-            {convertToDate(date.getFullYear(), date.getMonth(), date.getDate(), index)}
+            {convertToDate(date, index)}
           </Button>
         </Link>
       </Grid.Col>

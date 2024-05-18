@@ -30,8 +30,8 @@ function CoachProfileSearch() {
     return <div>Loading...</div>;
   }
 
-  if (!coach || !coachId) {
-    return <div>Coach not found</div>;
+  if (!coachId) {
+    return <div>CoachId is invalid</div>;
   }
 
   return (
