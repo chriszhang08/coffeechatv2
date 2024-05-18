@@ -32,7 +32,6 @@ const fakePeople = [
             "Business",
             "Alumni",
             "Latinx",
-            "LGBTQ",
             "Available Weekly"
         ],
         rating: 3.5,

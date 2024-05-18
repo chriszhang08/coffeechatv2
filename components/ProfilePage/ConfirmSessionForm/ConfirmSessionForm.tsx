@@ -34,6 +34,16 @@ function isoStringToDate(isoString: string | null): Date {
   return new Date(isoString);
 }
 
+function getPrice(type: string | null, coach: Coach | null) {
+  if (type === null) {
+    return '0';
+  } else if (type === 'interview') {
+    return '$50';
+  } else {
+    return '$30'
+  }
+}
+
 const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
                                                                  coachId,
                                                                  time,
@@ -128,15 +138,18 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           </Title>
           <Title order={5}>Date:</Title>
           <Text size="lg">{date.toDateString()}</Text>
-          <Title order={5}>Coach:</Title>
-          <Text size="lg">{coach?.name}</Text>
-          <Title order={5}>Email:</Title>
-          <Text size="lg">{coach?.email}</Text>
           <Title order={5}>Time:</Title>
           {/*TODO change the time to add the time zone and make it more readable*/}
           <Text size="lg">{date.toLocaleTimeString()}</Text>
+          <Title order={5}>Coach:</Title>
+          <Text size="lg">{coach?.name}</Text>
+          <Title order={5}>Session Type:</Title>
+          <Text size="lg">{type}</Text>
           <Title order={5}>Price:</Title>
-          <Text size="lg"/>
+          <Text size="lg">
+            {getPrice(type, coach)}
+          </Text>
+          <Title order={5}>Meeting Link:</Title>
           <Alert variant="light" color="blue" icon={icon}>
             The Google Meet link will be generated after the coach confirms the session.
           </Alert>
