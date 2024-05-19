@@ -12,6 +12,7 @@ interface CommentStackProps {
 export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
   const [visibleComments, setVisibleComments] = useState(2); // Initial number of visible comments
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [commentsLoaded, setCommentsLoaded] = useState(false)
 
   // Fetch comment data
   // TODO test this, it might be broken - what if all the comments don't load onComponentDidMount?
@@ -22,6 +23,9 @@ export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
   const commentDivs = comments?.slice(0, visibleComments).map((commentObj, id) => (
     <CommentHtml key={id} comment={commentObj} />
   ));
+  if (commentDivs !== undefined && !commentsLoaded){
+    setCommentsLoaded(true)
+  }
 
   const loadMoreComments = () => {
     setVisibleComments(comments ? comments.length : 0); // Load all the comments
@@ -35,14 +39,20 @@ export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
   return (
     <div>
       <h2 style={{ marginRight: 'auto' }}>Reviews</h2>
-      <Stack>
-        <Rating fractions={5} value={4.2} readOnly />
-        <Title order={1}>4.2</Title>
-        <Text size="sm">{totalComments} reviews</Text>
-      </Stack>
-      <SimpleGrid className={classes.comment} cols={2}>
-        {commentDivs}
-      </SimpleGrid>
+      {commentsLoaded ? (
+      <>
+        <Stack>
+          <Rating fractions={5} value={4.2} readOnly />
+          <Title order={1}>4.2</Title>
+          <Text size="sm">{totalComments} reviews</Text>
+        </Stack>
+        <SimpleGrid className={classes.comment} cols={2}>
+          {commentDivs}
+        </SimpleGrid>
+      </>
+    ) : (
+      <div>Loading...</div>
+    )}
       {visibleComments < totalComments && (
         <Center>
           <Button onClick={loadMoreComments} style={{ margin: 'auto' }}>

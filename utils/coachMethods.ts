@@ -20,6 +20,10 @@ export async function getPublicCoachData(
 }
 
 export async function getComments(coachId: string): Promise<Comment[]> {
+  
+  // For comment debugging -> adds delay for fetching the comments
+  // await new Promise(resolve => setTimeout(resolve, 5000));
+  
   const collectionRef = collection(db, `coaches/${coachId}/comments`);
   const snapshot = await getDocs(collectionRef);
   if (!snapshot.empty) {
