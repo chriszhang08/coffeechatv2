@@ -2,6 +2,7 @@ import {TextInput, Checkbox, Button, Group, Box, Fieldset, Textarea} from '@mant
 import {useForm} from '@mantine/form';
 import {useMutation} from '@tanstack/react-query';
 import {updateCoachAvailability, updateCoachProfileValues} from "@/utils/coachMethods";
+import {router} from "next/client";
 
 interface ProfileValues {
   name: string;
@@ -32,6 +33,9 @@ export function EditProfileBadgeForm({coachId}
   const mutation = useMutation({
     mutationFn: (profileValues: ProfileValues) =>
       updateCoachProfileValues(coachId, profileValues),
+    onSuccess: () => {
+      router.push('/success');
+    }
   });
 
   return (
