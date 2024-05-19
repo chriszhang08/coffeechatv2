@@ -96,9 +96,10 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
         body: JSON.stringify({
           coachName: coach?.name,
           date: date.toISOString(),
+          time: date.toLocaleTimeString(),
           link: 'https://meet.google.com/abc-123-def',
-          sessionDetails: 'This is a test session',
-          price: 100,
+          sessionDetails: `This is a ${type} session`,
+          price: getPrice(type, coach),
         }),
       });
 
