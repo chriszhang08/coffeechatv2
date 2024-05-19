@@ -1,8 +1,8 @@
-import {TextInput, Checkbox, Button, Group, Box, Fieldset, Textarea} from '@mantine/core';
+import {TextInput, Checkbox, Button, Group, Box, Fieldset, Textarea, Title} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useMutation} from '@tanstack/react-query';
-import {updateCoachAvailability, updateCoachProfileValues} from "@/utils/coachMethods";
-import {router} from "next/client";
+import {updateCoachProfileValues} from "@/utils/coachMethods";
+import {useRouter} from "next/navigation";
 
 interface ProfileValues {
   name: string;
@@ -30,6 +30,8 @@ export function EditProfileBadgeForm({coachId}
     },
   });
 
+  const router = useRouter();
+
   const mutation = useMutation({
     mutationFn: (profileValues: ProfileValues) =>
       updateCoachProfileValues(coachId, profileValues),
@@ -39,9 +41,10 @@ export function EditProfileBadgeForm({coachId}
   });
 
   return (
-    <Box maw={340} mx="auto">
+    <Box maw={340} mx="auto" pt={24} px={10}>
+      <Title order={1}>Edit Profile Info</Title>
       <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
-        <Fieldset legend="Personal information" variant="unstyled">
+        <Fieldset variant="unstyled">
           <TextInput
             withAsterisk
             label="Name"
@@ -73,7 +76,7 @@ export function EditProfileBadgeForm({coachId}
         </Fieldset>
 
         <Group justify="flex-end" mt="md">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Submit Profile Updates</Button>
         </Group>
       </form>
     </Box>

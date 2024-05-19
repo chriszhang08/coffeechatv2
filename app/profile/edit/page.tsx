@@ -1,7 +1,7 @@
 'use client';
 
 import {useSearchParams} from 'next/navigation';
-import {Button, Group} from '@mantine/core';
+import {Group} from '@mantine/core';
 import {Suspense, useEffect, useState} from 'react';
 import {HeaderSearch} from '@/components/Navbar/Header';
 import {usePublicCoachData} from '@/hooks/useCoachData';
@@ -13,29 +13,25 @@ function UpdateAvailabilityParams() {
   const searchParams = useSearchParams();
   const coachId = searchParams.get('coachId');
 
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [coach, setCoach] = useState<Coach | null>(null);
 
   const coachData = usePublicCoachData(coachId);
 
   useEffect(() => {
     setCoach(coachData);
-    setIsDataLoaded(true);
   }, [coachData]);
 
   return (
     <>
-      <Group>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
         <EditProfileBadgeForm coachId={coachId}/>
         {coach && <EditAvailabilityCalendar coachObj={coach}></EditAvailabilityCalendar>}
-      </Group>
+      </div>
     </>
   );
 }
 
 function Page() {
-  // TODO push 12 months of availiability
-  // TODO create a form that allows the user to select the availability
   return (
     <>
       <HeaderSearch/>

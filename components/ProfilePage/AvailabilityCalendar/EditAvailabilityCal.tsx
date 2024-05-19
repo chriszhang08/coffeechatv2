@@ -4,7 +4,7 @@ import {useMutation} from '@tanstack/react-query';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {Button, Stack, Table} from "@mantine/core";
 import {updateCoachAvailability} from "@/utils/coachMethods";
-import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 interface CalendarProps {
   coachObj: Coach;
@@ -177,6 +177,8 @@ export function EditAvailabilityCalendar({
 
     return {};
   };
+
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: (availabilityArray: string[]) =>
