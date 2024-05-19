@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+import {addDoc, collection, doc, getDocs, setDoc} from 'firebase/firestore';
 import { Coach } from '@/types/firestore/coaches/coach';
 import { Comment } from '@/types/firestore/coaches/comments/comment';
 import { db } from '@/firebase.config';
@@ -40,4 +40,22 @@ export async function updateCoachAvailability(
     return;
   }
   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
+}
+
+export async function updateCoachProfileValues(
+  coachId: string | null,
+  profileValues: Partial<Coach>,
+): Promise<void> {
+  if (!coachId) {
+    const coachRef = await addDoc(collection(db, 'coaches'), profileValues);
+    // Add the 'cidAuth' field with the coachRef.id
+    const updatedProfileValues = {
+      ...profileValues,
+      cidAuth: coachRef.id
+    };
+
+    // Update the newly created document with 'cidAuth' field
+    return setDoc(coachRef, updatedProfileValues, { merge: true });
+  }
+  return setDoc(doc(db, 'coaches', coachId), profileValues, { merge: true });
 }
