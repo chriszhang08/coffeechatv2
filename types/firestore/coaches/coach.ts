@@ -1,6 +1,5 @@
 export interface Coach {
   cidAuth: string;
-  cid: string;
   email: string;
   name: string;
   phoneNumber: number;

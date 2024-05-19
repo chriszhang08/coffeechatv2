@@ -12,7 +12,7 @@ import { Coach } from '@/types/firestore/coaches/coach';
 function CoachProfileSearch() {
   const searchParams = useSearchParams();
 
-  const [selectedButton, setSelectedButton] = useState<string | null>(null);
+  const [selectedButton, setSelectedButton] = useState<string | null>('resume');
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [coach, setCoach] = useState<Coach | null>(null);
 

@@ -85,7 +85,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const date = isoStringToDate(time);
 
   const handleSubmit = async () => {
-    // TODO sanitize input
     try {
       const response = await fetch('/api/send', {
         method: 'POST',
