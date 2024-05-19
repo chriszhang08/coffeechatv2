@@ -55,7 +55,7 @@ export const CommentStack: React.FC<CommentStackProps> = ({ coachId }) => {
     )}
       {visibleComments < totalComments && (
         <Center>
-          <Button onClick={loadMoreComments} style={{ margin: 'auto' }}>
+          <Button onClick={loadMoreComments} style={{ margin: 'auto', marginTop: '30px', marginBottom: '20px' }}>
             Load more comments
           </Button>
         </Center>
