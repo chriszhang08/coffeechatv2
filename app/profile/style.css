@@ -1,0 +1,41 @@
+#column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+
+#row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+  #column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  #row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #mobile-comments {
+    margin-top: 10px;
+    overflow: hidden;
+    max-width: 100%;
+  }
+}
