@@ -1,5 +1,6 @@
 'use client';
 
+import './style.css';
 import { useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import ProfileBadge from '@/components/ProfilePage/ProfileBadge/ProfileBadge';
@@ -35,20 +36,8 @@ function CoachProfileSearch() {
   }
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-end',
-      alignItems: 'center',
-      padding: 10,
-    }}
-    >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-      }}
-      >
+    <div id='column'>
+      <div id='row'>
         <ProfileBadge
           coachObj={coach}
           selectedButtonState={selectedButton}
@@ -59,7 +48,9 @@ function CoachProfileSearch() {
           selectedButtonState={selectedButton}
         />
       </div>
-      <CommentStack coachId={coachId} />
+      <div id="mobile-comments">
+        <CommentStack coachId={coachId} />
+      </div>
     </div>
   );
 }
