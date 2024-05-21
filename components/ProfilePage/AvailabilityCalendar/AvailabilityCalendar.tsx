@@ -64,7 +64,6 @@ export function AvailabilityCalendar({
           allowDeselect
           hideOutsideDates
         />
-        {/*// TODO add a div saying what time zone the modal is displaying time in*/}
         {selected && (
           <AvailabilityModal
             date={selected}

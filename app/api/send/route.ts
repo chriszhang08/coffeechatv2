@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import ConfirmSeshEmail from '@/react-email/emails/confirmed-session';
+import {isoStringToDate} from "@/utils/dateMethods";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -7,7 +8,13 @@ export async function POST(req: Request) {
   try {
     const res = await req.json();
 
-    const emailContent = ConfirmSeshEmail(res);
+    const date = isoStringToDate(res.date);
+
+    if (!res || !res.date) {
+      return Response.json({ error: 'No data provided' });
+    }
+
+    const emailContent = ConfirmSeshEmail({...res, date});
 
     const data = await resend.emails.send({
       from: 'onboarding@resend.dev',

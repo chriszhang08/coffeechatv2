@@ -74,6 +74,9 @@ export function AvailabilityModal({
       overflowY: 'auto',
     }}
     > {/* Change the maxHeight to your desired value */}
+      <div>
+        Times are in {Intl.DateTimeFormat().resolvedOptions().timeZone} time zone
+      </div>
       <Grid style={{
         paddingTop: 20,
         height: rowsHeight > 400 ? '100%' : 'auto',

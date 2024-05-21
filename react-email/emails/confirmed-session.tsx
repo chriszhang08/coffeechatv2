@@ -12,6 +12,7 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react';
+import {formatTimeStringLocal} from "@/utils/dateMethods";
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -87,8 +88,7 @@ const footer = {
 
 interface SessionDetailProps {
   coachName?: string;
-  date?: string;
-  time?: string;
+  date: Date;
   link?: string;
   sessionDetails?: string;
   price?: number;
@@ -97,7 +97,6 @@ interface SessionDetailProps {
 export const ConfirmSeshEmail = ({
                                      coachName,
                                      date,
-                                     time,
                                      link,
                                      sessionDetails,
                                      price,
@@ -124,10 +123,10 @@ export const ConfirmSeshEmail = ({
           </Section>
           <Section>
             <Text style={label}>Date:</Text>
-            <Text style={value}>{date}</Text>
+            <Text style={value}>{date.toDateString()}</Text>
           </Section>
           <Text style={label}>Time:</Text>
-          <Text style={value}>{time}</Text>
+          <Text style={value}>{formatTimeStringLocal(date)}</Text>
           <Section />
           <Section>
             <Text style={label}>Location:</Text>

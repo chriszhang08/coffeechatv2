@@ -23,7 +23,6 @@ export function indexmapToLocaltime(date: Date, index: number): string {
 
   date.setHours(hour, minute, 0, 0); // Set hours, minutes, and seconds, milliseconds
 
-  // TODO account for time zone shift
   // Format the date to "H:MM AM/PM" format
   return date.toLocaleString('en-US', {
     hour: 'numeric',
@@ -62,6 +61,7 @@ export function convertHextoAvailArray(hexstr: string): number[] {
   return utcArr.slice(24 * 4 + offset, 48 * 4 + offset);
 }
 
+// REQUIRES: date is a Date object in the client's local time zone
 // EFFECT: Converts a Date object to an index in the availability array
 // For example, January 1 will be converted to 0, while February 1 will be converted to 31
 export function datetimeToIndex(date: Date): number {
@@ -74,4 +74,20 @@ export function datetimeToIndex(date: Date): number {
   }
 
   return index + day - 1;
+}
+
+export function formatTimeStringLocal(date: Date): string {
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+    timeZoneName: 'short',
+  });
+}
+
+export function isoStringToDate(isoString: string | null): Date {
+  if (isoString === null) {
+    return new Date();
+  }
+  return new Date(isoString);
 }

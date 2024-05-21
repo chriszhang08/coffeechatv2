@@ -1,37 +1,16 @@
-import {
-  TextInput,
-  Textarea,
-  SimpleGrid,
-  Group,
-  Title,
-  Text,
-  Button,
-  Card,
-  Alert,
-  Container,
-} from '@mantine/core';
+import {Alert, Button, Card, Container, Group, SimpleGrid, Text, Textarea, TextInput, Title,} from '@mantine/core';
 import {useForm} from '@mantine/form';
-import {
-  collection,
-  addDoc,
-} from 'firebase/firestore';
 import {useRouter} from 'next/navigation';
 import React, {useEffect, useState} from 'react';
 import {IconInfoCircle} from '@tabler/icons-react';
 import {usePublicCoachData} from '@/hooks/useCoachData';
 import {Coach} from '@/types/firestore/coaches/coach';
+import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
   time: string | null;
   type: string | null;
-}
-
-function isoStringToDate(isoString: string | null): Date {
-  if (isoString === null) {
-    return new Date();
-  }
-  return new Date(isoString);
 }
 
 function getPrice(type: string | null, coach: Coach | null) {
@@ -94,8 +73,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
         // TODO make the json object more dynamic
         body: JSON.stringify({
           coachName: coach?.name,
-          date: date.toISOString(),
-          time: date.toLocaleTimeString(),
+          date: date,
           link: 'https://meet.google.com/abc-123-def',
           sessionDetails: `This is a ${type} session`,
           price: getPrice(type, coach),
@@ -140,7 +118,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           <Text size="lg">{date.toDateString()}</Text>
           <Title order={5}>Time:</Title>
           {/*TODO change the time to add the time zone and make it more readable*/}
-          <Text size="lg">{date.toLocaleTimeString()}</Text>
+          <Text size="lg">{formatTimeStringLocal(date)}</Text>
           <Title order={5}>Coach:</Title>
           <Text size="lg">{coach?.name}</Text>
           <Title order={5}>Session Type:</Title>

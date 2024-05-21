@@ -133,7 +133,6 @@ function When2MeetTable({cellValues, setCellValues}: { cellValues: number[][], s
   )
 }
 
-// TODO implement time zone conversion
 export function EditAvailabilityCalendar({
                                            coachObj,
                                          }: CalendarProps) {
