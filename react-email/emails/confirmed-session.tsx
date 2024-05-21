@@ -12,7 +12,7 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react';
-import {formatTimeStringLocal} from "@/utils/dateMethods";
+import {formatTimeStringLocal} from "../../utils/dateMethods";
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`

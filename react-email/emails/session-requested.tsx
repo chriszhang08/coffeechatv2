@@ -16,6 +16,7 @@ import {
 } from "@react-email/components";
 import {Tailwind} from "@react-email/tailwind";
 import * as React from "react";
+import {formatTimeStringLocal} from "../../utils/dateMethods";
 
 interface SessionDetailsProps {
   menteeName?: string;
@@ -23,7 +24,7 @@ interface SessionDetailsProps {
   menteePhone?: string;
   coachName?: string;
   sessionType?: string;
-  date?: Date,
+  date: Date,
   message?: string;
   price?: number;
 }
@@ -43,6 +44,8 @@ export const SessionRequestedEmail = ({
                                         price
                                       }: SessionDetailsProps) => {
   const previewText = `${menteeName} has requested a ${sessionType} session with you.`;
+
+  const confirmSessionUrl = `${baseUrl}/api/send`;
 
   return (
     <Html>
@@ -75,7 +78,7 @@ export const SessionRequestedEmail = ({
                 <strong>Date:</strong> {date?.toUTCString()}
               </Text>
               <Text>
-                <strong>Time:</strong> {date?.toTimeString()}
+                <strong>Time:</strong> {formatTimeStringLocal(date)}
               </Text>
               <Text>
                 <strong>Type:</strong> {sessionType}
@@ -93,7 +96,9 @@ export const SessionRequestedEmail = ({
               <Button
                 className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
               >
-                Clicking this button will confirm your session
+                <Link href={confirmSessionUrl}>
+                  Clicking this button will confirm your session
+                </Link>
               </Button>
             </Section>
           </Container>

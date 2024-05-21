@@ -209,8 +209,7 @@ export function EditAvailabilityCalendar({
         {selected && (
           <Stack>
             <When2MeetTable cellValues={cellValues} setCellValues={setCellValues}/>
-            <Button onClick={handleSaveButton}
-            >
+            <Button onClick={handleSaveButton}>
               Save availability for {selected.toUTCString()}
             </Button>
             <Button onClick={() => {

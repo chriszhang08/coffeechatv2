@@ -32,13 +32,13 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     initialValues: {
       name: '',
       email: '',
-      subject: '',
+      phone: '',
       message: '',
     },
     validate: {
       name: (value) => value.trim().length < 2,
       email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
+      phone: (value) => value.trim().length === 0,
     },
   });
 
@@ -65,17 +65,20 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/api/send', {
+      const response = await fetch('/api/confirmToMentor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // TODO make the json object more dynamic
         body: JSON.stringify({
           coachName: coach?.name,
+          menteeName: form.values.name,
+          menteeEmail: form.values.email,
+          menteePhone: form.values.phone,
+          message: form.values.message,
           date: date,
           link: 'https://meet.google.com/abc-123-def',
-          sessionDetails: `This is a ${type} session`,
+          sessionDetails: type,
           price: getPrice(type, coach),
         }),
       });
@@ -155,7 +158,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
             mt="md"
             name="number"
             variant="filled"
-            {...form.getInputProps('subject')}
+            {...form.getInputProps('phone')}
           />
           <Textarea
             mt="md"
