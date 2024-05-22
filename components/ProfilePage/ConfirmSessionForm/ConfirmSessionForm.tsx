@@ -120,7 +120,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           <Title order={5}>Date:</Title>
           <Text size="lg">{date.toDateString()}</Text>
           <Title order={5}>Time:</Title>
-          {/*TODO change the time to add the time zone and make it more readable*/}
           <Text size="lg">{formatTimeStringLocal(date)}</Text>
           <Title order={5}>Coach:</Title>
           <Text size="lg">{coach?.name}</Text>

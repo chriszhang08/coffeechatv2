@@ -2,17 +2,17 @@
 
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import ConfirmSessionForm from '@/components/ProfilePage/ConfirmSessionForm/ConfirmSessionForm';
 import { HeaderSearch } from '@/components/Navbar/Header';
+import SessionDetails from "@/components/ProfilePage/ConfirmSessionForm/SessionDetails";
 
-function ConfirmSessionParams() {
+function SessionDetailsParams() {
   const searchParams = useSearchParams();
 
   const coachId = searchParams.get('coachId');
   const time = searchParams.get('time');
   const type = searchParams.get('type');
 
-  return <ConfirmSessionForm coachId={coachId} time={time} type={type} />;
+  return <SessionDetails coachId={coachId} time={time} type={type} />;
 }
 
 function Page() {
@@ -28,7 +28,7 @@ function Page() {
       }}
       >
         <Suspense>
-          <ConfirmSessionParams />
+          <SessionDetailsParams />
         </Suspense>
       </div>
     </>

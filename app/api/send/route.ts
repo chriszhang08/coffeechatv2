@@ -8,13 +8,13 @@ export async function POST(req: Request) {
   try {
     const res = await req.json();
 
-    const date = isoStringToDate(res.date);
+    // const date = isoStringToDate(res.date);
+    //
+    // if (!res || !res.date) {
+    //   return Response.json({ error: 'No data provided' });
+    // }
 
-    if (!res || !res.date) {
-      return Response.json({ error: 'No data provided' });
-    }
-
-    const emailContent = ConfirmSeshEmail({...res, date});
+    const emailContent = ConfirmSeshEmail({...res, date: new Date()});
 
     const data = await resend.emails.send({
       from: 'onboarding@resend.dev',
