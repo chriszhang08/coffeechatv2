@@ -29,9 +29,10 @@ interface SessionDetailsProps {
   price?: number;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+// const baseUrl = process.env.VERCEL_URL
+//   ? `https://${process.env.VERCEL_URL}`
+//   : "";
+const baseUrl = "https://coffeechat-nine.vercel.app";
 
 export const SessionRequestedEmail = ({
                                         menteeName,
@@ -45,7 +46,7 @@ export const SessionRequestedEmail = ({
                                       }: SessionDetailsProps) => {
   const previewText = `${menteeName} has requested a ${sessionType} session with you.`;
 
-  const confirmSessionUrl = `${baseUrl}/api/send`;
+  const confirmSessionUrl = `${baseUrl}/confirmsession`;
 
   return (
     <Html>
