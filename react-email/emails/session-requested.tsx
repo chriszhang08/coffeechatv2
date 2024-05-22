@@ -22,6 +22,7 @@ interface SessionDetailsProps {
   menteeName?: string;
   menteeEmail?: string;
   menteePhone?: string;
+  coachId: string;
   coachName?: string;
   sessionType?: string;
   date: Date,
@@ -38,7 +39,7 @@ const baseUrl = "https://coffeechat-nine.vercel.app";
 export const SessionRequestedEmail = ({
                                         menteeName,
                                         menteeEmail,
-                                        menteePhone,
+                                        menteePhone, coachId,
                                         coachName,
                                         sessionType,
                                         date,
@@ -48,7 +49,7 @@ export const SessionRequestedEmail = ({
                                       }: SessionDetailsProps) => {
   const previewText = `${menteeName} has requested a ${sessionType} session with you.`;
 
-  const confirmSessionUrl = `${baseUrl}/confirmsession?sessionId=${sessionId}`;
+  const confirmSessionUrl = `${baseUrl}/confirmsession?sessionId=${sessionId}?coachId=${coachId}`;
 
   return (
     <Html>

@@ -67,6 +67,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const handleSubmit = async () => {
     let sessionData = {
       coachId: coachId,
+      coachName: coach?.name,
       menteeName: form.values.name,
       menteeEmail: form.values.email,
       menteePhone: form.values.phone,

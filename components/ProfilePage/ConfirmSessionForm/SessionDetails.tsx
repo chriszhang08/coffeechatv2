@@ -1,19 +1,19 @@
 import {Alert, Button, Card, Container, Group, SimpleGrid, Text, Textarea, TextInput, Title,} from '@mantine/core';
-import {useForm} from '@mantine/form';
 import {useRouter} from 'next/navigation';
 import React, {useEffect, useState} from 'react';
 import {IconInfoCircle} from '@tabler/icons-react';
-import {usePublicCoachData} from '@/hooks/useCoachData';
+import {Session} from '@/types/firestore/sessions/session';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
+import {usePublicSessionData} from "@/hooks/useSessionData";
+import {usePublicCoachData} from "@/hooks/useCoachData";
 
 interface SessionDetailsProps {
-  coachId: string | null;
-  time: string | null;
-  type: string | null;
+  sessionId: string | null;
+  coachObj: Coach | null;
 }
 
-function getPrice(type: string | null, coach: Coach | null) {
+function getPrice(type: string | null, coach: Session | null) {
   if (type === null) {
     return '0';
   } else if (type === 'interview') {
@@ -24,30 +24,27 @@ function getPrice(type: string | null, coach: Coach | null) {
 }
 
 const SessionDetails: React.FC<SessionDetailsProps> = ({
-                                                                 coachId,
-                                                                 time,
-                                                                 type
+                                                                 sessionId,
+                                                         coachObj
                                                                }) => {
-  const [coach, setCoach] = useState<Coach | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const icon = <IconInfoCircle/>;
 
   const router = useRouter();
 
-  const coachData = usePublicCoachData(coachId);
+  const sessionData = usePublicSessionData(sessionId);
 
   useEffect(() => {
-    setCoach(coachData);
+    setSession(sessionData);
     setIsDataLoaded(true);
-  }, [coachData]);
+  }, [sessionData]);
 
   if (!isDataLoaded) {
     // TODO fix this loading spinner
     return <div>Loading...</div>;
   }
-
-  const date = isoStringToDate(time);
 
   const handleSubmit = async () => {
     try {
@@ -57,11 +54,11 @@ const SessionDetails: React.FC<SessionDetailsProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          coachName: coach?.name,
-          date: date,
+          coachName: coachObj?.name,
+          date: sessionData?.datetimeString,
           link: 'https://meet.google.com/abc-123-def',
-          sessionDetails: type,
-          price: getPrice(type, coach),
+          sessionDetails: sessionData?.sessionType,
+          // price: getPrice(sessionData?.sessionType, session),
         }),
       });
 
@@ -96,17 +93,17 @@ const SessionDetails: React.FC<SessionDetailsProps> = ({
             Session Information
           </Title>
           <Title order={5}>Date:</Title>
-          <Text size="lg">{date.toDateString()}</Text>
-          <Title order={5}>Time:</Title>
-          <Text size="lg">{formatTimeStringLocal(date)}</Text>
-          <Title order={5}>Coach:</Title>
-          <Text size="lg">{coach?.name}</Text>
-          <Title order={5}>Session Type:</Title>
-          <Text size="lg">{type}</Text>
-          <Title order={5}>Price:</Title>
-          <Text size="lg">
-            {getPrice(type, coach)}
-          </Text>
+          {/*<Text size="lg">{date.toDateString()}</Text>*/}
+          {/*<Title order={5}>Time:</Title>*/}
+          {/*<Text size="lg">{formatTimeStringLocal(date)}</Text>*/}
+          {/*<Title order={5}>Coach:</Title>*/}
+          {/*<Text size="lg">{session?.name}</Text>*/}
+          {/*<Title order={5}>Session Type:</Title>*/}
+          {/*<Text size="lg">{type}</Text>*/}
+          {/*<Title order={5}>Price:</Title>*/}
+          {/*<Text size="lg">*/}
+          {/*  {getPrice(type, session)}*/}
+          {/*</Text>*/}
           <Title order={5}>Meeting Link:</Title>
           <Alert variant="light" color="blue" icon={icon}>
             https://meet.google.com/abc-123-def
