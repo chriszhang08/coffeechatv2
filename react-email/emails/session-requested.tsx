@@ -27,6 +27,7 @@ interface SessionDetailsProps {
   date: Date,
   message?: string;
   price?: number;
+  sessionId: string;
 }
 
 // const baseUrl = process.env.VERCEL_URL
@@ -42,7 +43,8 @@ export const SessionRequestedEmail = ({
                                         sessionType,
                                         date,
                                         message,
-                                        price
+                                        price,
+                                        sessionId,
                                       }: SessionDetailsProps) => {
   const previewText = `${menteeName} has requested a ${sessionType} session with you.`;
 
@@ -69,7 +71,7 @@ export const SessionRequestedEmail = ({
               >
                 {menteeEmail}
               </Link>
-              ) has requested a <strong>{sessionType}</strong> session with you.
+              ) has requested a <strong>{sessionType}</strong> session with you. {sessionId}
             </Text>
             <Section className="my-[20px] mx-0 p-0">
               <Heading className="text-black text-[18px] font-semibold text-center p-0 my-[10px] mx-0">

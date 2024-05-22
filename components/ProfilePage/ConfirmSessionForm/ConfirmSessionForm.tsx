@@ -6,6 +6,7 @@ import {IconInfoCircle} from '@tabler/icons-react';
 import {usePublicCoachData} from '@/hooks/useCoachData';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
+import {createSession} from "@/utils/sessionMethods";
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
@@ -64,27 +65,30 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const date = isoStringToDate(time);
 
   const handleSubmit = async () => {
+    let sessionData = {
+      coachId: coachId,
+      menteeName: form.values.name,
+      menteeEmail: form.values.email,
+      menteePhone: form.values.phone,
+      message: form.values.message,
+      date: date,
+      link: 'https://meet.google.com/abc-123-def',
+      sessionDetails: type,
+      price: getPrice(type, coach),
+    };
     try {
+      const sessionId = await createSession(sessionData);
+      console.log("Session ID", sessionId);
       const response = await fetch('/api/confirmToMentor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          coachName: coach?.name,
-          menteeName: form.values.name,
-          menteeEmail: form.values.email,
-          menteePhone: form.values.phone,
-          message: form.values.message,
-          date: date,
-          link: 'https://meet.google.com/abc-123-def',
-          sessionDetails: type,
-          price: getPrice(type, coach),
-        }),
+        body: JSON.stringify({...sessionData, sessionId: sessionId}),
       });
 
       if (response.ok) {
-        console.log('Email sent successfully');
+        console.log(response);
         router.push('/success');
         // Handle success
       } else {

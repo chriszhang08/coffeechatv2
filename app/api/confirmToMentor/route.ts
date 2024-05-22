@@ -10,10 +10,6 @@ export async function POST(req: Request) {
 
     const date = isoStringToDate(res.date);
 
-    if (!res || !res.date) {
-      return Response.json({ error: 'No data provided' });
-    }
-
     const emailContent = SessionRequestedEmail({...res, date});
 
     const data = await resend.emails.send({
@@ -23,7 +19,7 @@ export async function POST(req: Request) {
       react: emailContent,
       text: 'Hello world',
     });
-
+    console.log("GREAT SUCCESS")
     return Response.json(data);
   } catch (error) {
     return Response.json({ error });
