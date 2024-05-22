@@ -78,7 +78,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     };
     try {
       const sessionId = await createSession(sessionData);
-      console.log("Session ID", sessionId);
       const response = await fetch('/api/confirmToMentor', {
         method: 'POST',
         headers: {
@@ -88,11 +87,10 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       });
 
       if (response.ok) {
-        console.log(response);
         router.push('/success');
         // Handle success
       } else {
-        console.error('Failed to send email:', response.statusText);
+        console.error('Failed to send email: Error(', response.status, ') ', response.statusText);
         // Handle error
       }
     } catch (e) {

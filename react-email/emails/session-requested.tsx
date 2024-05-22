@@ -26,7 +26,7 @@ interface SessionDetailsProps {
   sessionType?: string;
   date: Date,
   message?: string;
-  price?: number;
+  price?: string;
   sessionId: string;
 }
 
@@ -48,7 +48,7 @@ export const SessionRequestedEmail = ({
                                       }: SessionDetailsProps) => {
   const previewText = `${menteeName} has requested a ${sessionType} session with you.`;
 
-  const confirmSessionUrl = `${baseUrl}/confirmsession`;
+  const confirmSessionUrl = `${baseUrl}/confirmsession?sessionId=${sessionId}`;
 
   return (
     <Html>
@@ -71,12 +71,15 @@ export const SessionRequestedEmail = ({
               >
                 {menteeEmail}
               </Link>
-              ) has requested a <strong>{sessionType}</strong> session with you. {sessionId}
+              ) has requested a <strong>{sessionType}</strong> session with you.
             </Text>
             <Section className="my-[20px] mx-0 p-0">
               <Heading className="text-black text-[18px] font-semibold text-center p-0 my-[10px] mx-0">
                 Session Details
               </Heading>
+              <Text>
+                <strong>Session ID:</strong> {sessionId}
+              </Text>
               <Text>
                 <strong>Date:</strong> {date?.toUTCString()}
               </Text>
@@ -88,7 +91,7 @@ export const SessionRequestedEmail = ({
               </Text>
               {price && (
                 <Text>
-                  <strong>Price:</strong> ${price.toFixed(2)}
+                  <strong>Price:</strong> {price}
                 </Text>
               )}
               <Text>
@@ -119,7 +122,8 @@ SessionRequestedEmail.PreviewProps = {
   sessionType: 'Mock Interview',
   date: new Date(),
   message: 'I am currently coding this react email message. I hope it works.',
-  price: 50.00,
+  price: '$50.00',
+  sessionId: 'KNc8cPDQijcAmamV9E6n',
 } as SessionDetailsProps;
 
 export default SessionRequestedEmail;

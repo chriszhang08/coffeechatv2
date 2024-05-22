@@ -19,9 +19,8 @@ export async function POST(req: Request) {
       react: emailContent,
       text: 'Hello world',
     });
-    console.log("GREAT SUCCESS")
-    return Response.json(data);
+    return Response.json(data, {status : 200} );
   } catch (error) {
-    return Response.json({ error });
+    return Response.json(error, {status : 500, statusText: "There was probably something wrong with the email template, idk go debug it - from /route.ts" });
   }
 }

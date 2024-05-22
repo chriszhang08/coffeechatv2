@@ -48,23 +48,6 @@ const paragraph = {
   textAlign: 'left' as const,
 };
 
-const anchor = {
-  color: '#556cd6',
-};
-
-const button = {
-  backgroundColor: '#656ee8',
-  borderRadius: '5px',
-  color: '#fff',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'block',
-  width: '100%',
-  padding: '10px',
-};
-
 const label = {
   color: '#555',
   display: 'inline-block',
@@ -91,7 +74,7 @@ interface SessionDetailProps {
   date: Date;
   link?: string;
   sessionDetails?: string;
-  price?: number;
+  price?: string;
 }
 
 export const ConfirmSeshEmail = ({
@@ -149,5 +132,18 @@ export const ConfirmSeshEmail = ({
     </Body>
   </Html>
 );
+
+ConfirmSeshEmail.PreviewProps = {
+  menteeName: 'Chris Zhang',
+  menteeEmail: 'czhang2003@gmail.com',
+  menteePhone: '(123) 456-7890',
+  coachName: 'Leo Lindemberg',
+  sessionDetails: 'Mock Interview',
+  date: new Date(),
+  message: 'I am currently coding this react email message. I hope it works.',
+  link: 'https://meet.google.com/abc-123-def',
+  price: '$50.00',
+  sessionId: 'KNc8cPDQijcAmamV9E6n',
+} as SessionDetailProps;
 
 export default ConfirmSeshEmail;
