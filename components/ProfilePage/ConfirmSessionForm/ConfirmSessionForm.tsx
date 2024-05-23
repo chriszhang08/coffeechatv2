@@ -79,7 +79,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     };
     try {
       const sessionId = await createSession(sessionData);
-      const response = await fetch('/api/confirmToMentor', {
+      const response = await fetch('/api/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -38,4 +38,4 @@ exports.emailCoachConfirmation = (0, https_1.onRequest)(async (request, response
         response.send({ error });
     }
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.ts.map

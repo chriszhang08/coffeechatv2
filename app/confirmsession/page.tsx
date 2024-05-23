@@ -11,25 +11,26 @@ import {ProfileBadgeSnapshot} from "@/components/ProfilePage/ProfileBadge/Profil
 import ProfileBadge from "@/components/ProfilePage/ProfileBadge/ProfileBadge";
 
 function SessionDetailsParams() {
-  const searchParams = useSearchParams();
-
-  const sessionId = searchParams.get('sessionId');
-  const coachId = searchParams.get('coachId');
-
-  const [coach, setCoach] = useState<Coach | null>(null);
-
-  const coachData = usePublicCoachData(coachId);
-
-  useEffect(() => {
-    setCoach(coachData);
-  }, [coachData]);
-
-  return (
-    <div>
-      <ProfileBadgeSnapshot person={coach} />
-      <SessionDetails sessionId={sessionId} coachObj={coachData}/>
-    </div>
-  );
+  // const searchParams = useSearchParams();
+  //
+  // const sessionId = searchParams.get('sessionId');
+  // const coachId = searchParams.get('coachId');
+  //
+  // const [coach, setCoach] = useState<Coach | null>(null);
+  //
+  // const coachData = usePublicCoachData(coachId);
+  //
+  // useEffect(() => {
+  //   setCoach(coachData);
+  // }, [coachData]);
+  //
+  // return (
+  //   <div>
+  //     <ProfileBadgeSnapshot person={coach} />
+  //     <SessionDetails sessionId={sessionId} coachObj={coachData}/>
+  //   </div>
+  // );
+  return <div>Nothing page</div>
 }
 
 function Page() {

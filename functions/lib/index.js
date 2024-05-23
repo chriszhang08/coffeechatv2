@@ -17,4 +17,4 @@ exports.helloWorld = (0, https_1.onRequest)((request, response) => {
     logger.info("Hello rafgsssgssssss!", { structuredData: true });
     response.send({ "data": "Hello from Firebase!" });
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=index.ts.map
