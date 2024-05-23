@@ -1,28 +1,10 @@
 import {Button, Grid} from '@mantine/core';
 import React from 'react';
 import Link from 'next/link';
+import {convertHextoAvailArray, indexmapToLocaltime, timeslotToUTCstr} from "@/utils/dateMethods";
 
-function convertToDate(date : Date, index: number): string {
-  const hour = Math.floor(index / 4);
-  const minute = (index % 4) * 15;
-
-  date.setHours(hour, minute, 0, 0); // Set hours, minutes, and seconds, milliseconds
-
-  // Format the date to "H:MM AM/PM" format
-  return date.toLocaleString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  });
-}
-
-function timeToDatetime(d: Date, index: number): string {
-  const hour = Math.floor(index / 4);
-  const minute = (index % 4) * 15;
-
-  d.setHours(hour, minute, 0, 0);
-  return d.toISOString();
-}
+// Datetime objects in the calendar will be displayed in the client's local time zone.
+// The datetime objects and availability hexstrings will be stored in the backend in UTC time.
 
 // Filter the availability based on the type of session
 function filterAvailability(availability: number[], typeofSession: string | null): number[] {
@@ -52,33 +34,22 @@ function filterAvailability(availability: number[], typeofSession: string | null
 export function AvailabilityModal({
                                     date,
                                     coachId,
-                                    dailyAvailability,
+                                    threedayAvailability,
                                     typeofSession,
                                   }: {
   date: Date;
   coachId: string
-  dailyAvailability: string
+  threedayAvailability: string
   typeofSession: string | null
 }) {
-  function convertHextoAvailArray(hexstr: string): number[] {
-    const hex = hexstr.split('');
-    const availability = hex.map((char) => parseInt(char, 16)
-      .toString(2)
-      .padStart(4, '0'));
-    const availabilityArray = availability.join('')
-      .split('')
-      .map((char) => parseInt(char, 10));
-    return filterAvailability(availabilityArray, typeofSession);
-  }
 
-  const availability = convertHextoAvailArray(dailyAvailability);
+  const availability = filterAvailability(convertHextoAvailArray(threedayAvailability), typeofSession);
 
   const rows = availability.map((time, index) => (
     time === 1 && (
       <Grid.Col span={4} key={index}>
-        {/*TODO right now pass the time and coachId as query params, but this should be changed to a POST request*/}
         <Link
-          href={`/profile/confirmsesh?coachId=${coachId}&time=${timeToDatetime(date, index)}&type=${typeofSession}`}
+          href={`/profile/confirmsesh?coachId=${coachId}&time=${timeslotToUTCstr(date, index)}&type=${typeofSession}`}
           passHref
         >
           <Button
@@ -88,7 +59,7 @@ export function AvailabilityModal({
               paddingRight: 'unset',
             }}
           >
-            {convertToDate(date, index)}
+            {indexmapToLocaltime(date, index)}
           </Button>
         </Link>
       </Grid.Col>
@@ -103,6 +74,9 @@ export function AvailabilityModal({
       overflowY: 'auto',
     }}
     > {/* Change the maxHeight to your desired value */}
+      <div>
+        Times are in {Intl.DateTimeFormat().resolvedOptions().timeZone} time zone
+      </div>
       <Grid style={{
         paddingTop: 20,
         height: rowsHeight > 400 ? '100%' : 'auto',

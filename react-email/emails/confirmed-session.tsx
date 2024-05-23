@@ -12,6 +12,7 @@ import {
   Text,
 } from '@react-email/components';
 import * as React from 'react';
+import {formatTimeStringLocal} from "../../utils/dateMethods";
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -47,23 +48,6 @@ const paragraph = {
   textAlign: 'left' as const,
 };
 
-const anchor = {
-  color: '#556cd6',
-};
-
-const button = {
-  backgroundColor: '#656ee8',
-  borderRadius: '5px',
-  color: '#fff',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'block',
-  width: '100%',
-  padding: '10px',
-};
-
 const label = {
   color: '#555',
   display: 'inline-block',
@@ -87,17 +71,15 @@ const footer = {
 
 interface SessionDetailProps {
   coachName?: string;
-  date?: string;
-  time?: string;
+  date: Date;
   link?: string;
   sessionDetails?: string;
-  price?: number;
+  price?: string;
 }
 
 export const ConfirmSeshEmail = ({
                                      coachName,
                                      date,
-                                     time,
                                      link,
                                      sessionDetails,
                                      price,
@@ -124,10 +106,10 @@ export const ConfirmSeshEmail = ({
           </Section>
           <Section>
             <Text style={label}>Date:</Text>
-            <Text style={value}>{date}</Text>
+            <Text style={value}>{date.toDateString()}</Text>
           </Section>
           <Text style={label}>Time:</Text>
-          <Text style={value}>{time}</Text>
+          <Text style={value}>{formatTimeStringLocal(date)}</Text>
           <Section />
           <Section>
             <Text style={label}>Location:</Text>
@@ -150,5 +132,18 @@ export const ConfirmSeshEmail = ({
     </Body>
   </Html>
 );
+
+ConfirmSeshEmail.PreviewProps = {
+  menteeName: 'Chris Zhang',
+  menteeEmail: 'czhang2003@gmail.com',
+  menteePhone: '(123) 456-7890',
+  coachName: 'Leo Lindemberg',
+  sessionDetails: 'Mock Interview',
+  date: new Date(),
+  message: 'I am currently coding this react email message. I hope it works.',
+  link: 'https://meet.google.com/abc-123-def',
+  price: '$50.00',
+  sessionId: 'KNc8cPDQijcAmamV9E6n',
+} as SessionDetailProps;
 
 export default ConfirmSeshEmail;

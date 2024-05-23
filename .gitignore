@@ -134,3 +134,6 @@ dist
 notes.txt
 
 .idea
+
+credentials.json
+token.json

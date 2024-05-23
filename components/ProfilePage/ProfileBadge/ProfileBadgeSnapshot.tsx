@@ -4,54 +4,39 @@ import { IconBookmark } from '@tabler/icons-react';
 import { Card, Image, Text, Group, Badge, Button, ActionIcon, Rating } from '@mantine/core';
 import Link from 'next/link';
 import classes from './ProfileBadge.module.css';
+import {Coach} from "@/types/firestore/coaches/coach";
 
 export function ProfileBadgeSnapshot({
                                        person,
                                      }: {
-  person: {
-    avatar: string,
-    name: string,
-    description: string,
-    email: string,
-    rate: number,
-    rating: number,
-    tags: string[],
-    numReviews: number,
-    location: string,
-  };
+  person: Partial<Coach>;
 }) {
-  const { avatar, name, description, rating, tags, numReviews } = person;
-  const features = tags.map((tag) => (
-    <Badge variant="light" key={tag}>
-      {tag}
-    </Badge>
-  ));
 
   return (
     <Card p="md" className={classes.cardsnap}>
       <Card.Section>
-        <Image src={avatar} alt={name} height={180} />
+        {/*<Image src={avatar} alt={name} height={180} />*/}
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">
         <Group justify="apart">
           <Text fz="lg" fw={500}>
-            {name}
+            {person?.name}
           </Text>
-          <Rating fractions={2} value={rating} readOnly />
+          <Rating fractions={2} value={person?.rating} readOnly />
           <Text fz="xs" c="dimmed">
-            {numReviews} reviews
+            {person?.numSessions} reviews
           </Text>
         </Group>
         <Text fz="sm" mt="xs">
-          {description}
+          {person?.bio}
         </Text>
       </Card.Section>
 
       <Card.Section className={classes.section}>
-        <Group gap={7} mt={5}>
-          {features}
-        </Group>
+        {/*<Group gap={7} mt={5}>*/}
+        {/*  {features}*/}
+        {/*</Group>*/}
       </Card.Section>
 
       <Group mt="xs">
