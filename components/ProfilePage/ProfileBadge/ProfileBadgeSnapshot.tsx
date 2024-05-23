@@ -9,7 +9,7 @@ import {Coach} from "@/types/firestore/coaches/coach";
 export function ProfileBadgeSnapshot({
                                        person,
                                      }: {
-  person: Coach | null;
+  person: Partial<Coach>;
 }) {
 
   return (
