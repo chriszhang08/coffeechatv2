@@ -1,37 +1,17 @@
-import {
-  TextInput,
-  Textarea,
-  SimpleGrid,
-  Group,
-  Title,
-  Text,
-  Button,
-  Card,
-  Alert,
-  Container,
-} from '@mantine/core';
+import {Alert, Button, Card, Container, Group, SimpleGrid, Text, Textarea, TextInput, Title,} from '@mantine/core';
 import {useForm} from '@mantine/form';
-import {
-  collection,
-  addDoc,
-} from 'firebase/firestore';
 import {useRouter} from 'next/navigation';
 import React, {useEffect, useState} from 'react';
 import {IconInfoCircle} from '@tabler/icons-react';
 import {usePublicCoachData} from '@/hooks/useCoachData';
 import {Coach} from '@/types/firestore/coaches/coach';
+import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
+import {createSession} from "@/utils/sessionMethods";
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
   time: string | null;
   type: string | null;
-}
-
-function isoStringToDate(isoString: string | null): Date {
-  if (isoString === null) {
-    return new Date();
-  }
-  return new Date(isoString);
 }
 
 function getPrice(type: string | null, coach: Coach | null) {
@@ -53,13 +33,13 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     initialValues: {
       name: '',
       email: '',
-      subject: '',
+      phone: '',
       message: '',
     },
     validate: {
       name: (value) => value.trim().length < 2,
       email: (value) => !/^\S+@\S+$/.test(value),
-      subject: (value) => value.trim().length === 0,
+      phone: (value) => value.trim().length === 0,
     },
   });
 
@@ -104,29 +84,33 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const date = isoStringToDate(time);
 
   const handleSubmit = async () => {
+    let sessionData = {
+      coachId: coachId,
+      coachName: coach?.name,
+      menteeName: form.values.name,
+      menteeEmail: form.values.email,
+      menteePhone: form.values.phone,
+      message: form.values.message,
+      date: date,
+      link: 'https://meet.google.com/abc-123-def',
+      sessionDetails: type,
+      price: getPrice(type, coach),
+    };
     try {
+      const sessionId = await createSession(sessionData);
       const response = await fetch('/api/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // TODO make the json object more dynamic
-        body: JSON.stringify({
-          coachName: coach?.name,
-          date: date.toISOString(),
-          time: date.toLocaleTimeString(),
-          link: 'https://meet.google.com/abc-123-def',
-          sessionDetails: `This is a ${type} session`,
-          price: getPrice(type, coach),
-        }),
+        body: JSON.stringify({...sessionData, sessionId: sessionId}),
       });
 
       if (response.ok) {
-        console.log('Email sent successfully');
         router.push('/success');
         // Handle success
       } else {
-        console.error('Failed to send email:', response.statusText);
+        console.error('Failed to send email: Error(', response.status, ') ', response.statusText);
         // Handle error
       }
     } catch (e) {
@@ -158,8 +142,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           <Title order={5}>Date:</Title>
           <Text size="lg">{date.toDateString()}</Text>
           <Title order={5}>Time:</Title>
-          {/*TODO change the time to add the time zone and make it more readable*/}
-          <Text size="lg">{date.toLocaleTimeString()}</Text>
+          <Text size="lg">{formatTimeStringLocal(date)}</Text>
           <Title order={5}>Coach:</Title>
           <Text size="lg">{coach?.name}</Text>
           <Title order={5}>Session Type:</Title>
@@ -196,7 +179,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
             mt="md"
             name="number"
             variant="filled"
-            {...form.getInputProps('subject')}
+            {...form.getInputProps('phone')}
           />
           <Textarea
             mt="md"

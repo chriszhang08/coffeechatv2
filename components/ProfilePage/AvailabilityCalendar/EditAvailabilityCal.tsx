@@ -5,6 +5,8 @@ import {Coach} from '@/types/firestore/coaches/coach';
 import {Button, Stack, Table} from "@mantine/core";
 import {updateCoachAvailability} from "@/utils/coachMethods";
 import {useRouter} from "next/navigation";
+import {datetimeToIndex} from "@/utils/dateMethods";
+
 
 interface CalendarProps {
   coachObj: Coach;
@@ -17,20 +19,6 @@ const rows = Array.from({length: 24}, (_, i) => i);
 // TODO change this to the read value from the coach's availability from the database
 // TODO cache this on reload
 let yearlyAvailability = Array.from({length: 365}, () => '000000000FFFFFFFFF000000');
-
-// EFFECT: Converts a Date object to an index in the availability array
-// For example, January 1 will be converted to 0, while February 1 will be converted to 31
-const datetimeToIndex = (date: Date): number => {
-  const month = date.getMonth();
-  const day = date.getDate();
-
-  let index = 0;
-  for (let i = 0; i < month; i++) {
-    index += new Date(date.getFullYear(), i + 1, 0).getDate(); // Add the days of each previous month
-  }
-
-  return index + day - 1;
-};
 
 function convertCellValuesToHexString(cellValues: number[][]): string {
   const hexDigits = '0123456789ABCDEF';
@@ -145,7 +133,6 @@ function When2MeetTable({cellValues, setCellValues}: { cellValues: number[][], s
   )
 }
 
-// TODO implement time zone conversion
 export function EditAvailabilityCalendar({
                                            coachObj,
                                          }: CalendarProps) {
@@ -222,8 +209,7 @@ export function EditAvailabilityCalendar({
         {selected && (
           <Stack>
             <When2MeetTable cellValues={cellValues} setCellValues={setCellValues}/>
-            <Button onClick={handleSaveButton}
-            >
+            <Button onClick={handleSaveButton}>
               Save availability for {selected.toUTCString()}
             </Button>
             <Button onClick={() => {
