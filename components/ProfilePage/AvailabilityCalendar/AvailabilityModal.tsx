@@ -1,5 +1,5 @@
 import {Button, Grid} from '@mantine/core';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {convertHextoAvailArray, indexmapToLocaltime, timeslotToUTCstr} from "@/utils/dateMethods";
 
@@ -42,6 +42,17 @@ export function AvailabilityModal({
   threedayAvailability: string
   typeofSession: string | null
 }) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const availability = filterAvailability(convertHextoAvailArray(threedayAvailability), typeofSession);
 
@@ -70,8 +81,9 @@ export function AvailabilityModal({
 
   return (
     <div style={{
-      maxHeight: '400px',
+      maxHeight: isMobile ? '250px' : '400px',
       overflowY: 'auto',
+      width: isMobile ? '80%' : '100%',
     }}
     > {/* Change the maxHeight to your desired value */}
       <div>

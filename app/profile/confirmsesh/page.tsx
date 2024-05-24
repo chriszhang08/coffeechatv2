@@ -25,6 +25,7 @@ function Page() {
         justifyContent: 'flex-end',
         alignItems: 'center',
         padding: 10,
+        overflow: 'hidden',
       }}
       >
         <Suspense>

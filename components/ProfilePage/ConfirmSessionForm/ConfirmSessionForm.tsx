@@ -45,17 +45,36 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
 
   const [coach, setCoach] = useState<Coach | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const icon = <IconInfoCircle/>;
 
   const router = useRouter();
 
   const coachData = usePublicCoachData(coachId);
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
+    };
+    if (typeof window !== 'undefined') {
+      handleResize();
+      window.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setCoach(coachData);
     setIsDataLoaded(true);
   }, [coachData]);
+
 
   if (!isDataLoaded) {
     // TODO fix this loading spinner
@@ -115,7 +134,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       >
         Confirm Session
       </Title>
-      <SimpleGrid cols={2} style={{ paddingTop: 50 }}>
+      <SimpleGrid cols={isMobile ? 1 : 2} style={{ paddingTop: 50 }}>
         <Card withBorder radius="md" style={{width: 400}}>
           <Title order={2}>
             Session Information
