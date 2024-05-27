@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
     const date = isoStringToDate(res.date);
 
-    const emailContent = SessionRequestedEmail({...res, date});
+    // const emailContent = SessionRequestedEmail({...res, date});
 
     // const data = await resend.emails.send({
     //   from: 'onboarding@resend.dev',

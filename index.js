@@ -70,12 +70,12 @@ async function authorize() {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  * @param sessionObj
  */
-async function listEvents(auth, sessionObj) {
+async function sendCalendarInvite(auth, sessionObj) {
     const calendar = google.calendar({version: 'v3', auth});
     // Refer to the Node.js quickstart on how to setup the environment:
 
     const event = {
-        'summary': 'Resume Review Session',
+        'summary': 'MentorMeets | 1-on-1 Session',
         'location': sessionObj.link,
         'description': sessionObj.date.toString(),
         'start': {
@@ -85,7 +85,8 @@ async function listEvents(auth, sessionObj) {
             'dateTime': '2024-05-28T17:00:00-07:00',
         },
         'attendees': [
-            {'email': 'czhang2003@gmail.com'},
+            {'email': sessionObj.coachEmail},
+            {'email': sessionObj.menteeEmail},
         ],
         'reminders': {
             'useDefault': false,
@@ -112,5 +113,5 @@ async function listEvents(auth, sessionObj) {
 
 module.exports = {
     authorize,
-    listEvents,
+    listEvents: sendCalendarInvite,
 }
