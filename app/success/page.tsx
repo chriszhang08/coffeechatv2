@@ -1,7 +1,7 @@
 // app/success/page.tsx
 
 import React from 'react';
-import { Button, Title, Text, Container, Group } from '@mantine/core';
+import {Button, Title, Text, Container, Group, Center} from '@mantine/core';
 import Link from "next/link";
 import {HeaderSearch} from "@/components/Navbar/Header";
 
@@ -20,13 +20,13 @@ export default function SuccessPage() {
           If it&apos;s not there, please email {' '}
           <Link href='mailto:czhang2003@gmail.com'>czhang2003@gmail.com</Link>.
         </Text>
-        <Group>
+        <Center>
           <Link href="/">
             <Button variant="filled">
               Go to Home Page
             </Button>
           </Link>
-        </Group>
+        </Center>
       </Container>
     </div>
   );
