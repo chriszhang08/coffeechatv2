@@ -1,7 +1,7 @@
 'use client';
 
 import {useSearchParams} from 'next/navigation';
-import {Suspense, useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {HeaderSearch} from '@/components/Navbar/Header';
 import SessionDetails from "@/components/ProfilePage/ConfirmSessionForm/SessionDetails";
 import {Coach} from "@/types/firestore/coaches/coach";
@@ -11,28 +11,21 @@ import {ProfileBadgeSnapshot} from "@/components/ProfilePage/ProfileBadge/Profil
 import ProfileBadge from "@/components/ProfilePage/ProfileBadge/ProfileBadge";
 import {useHash} from "@mantine/hooks";
 import {useRouter} from "next/navigation";
-import {loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
+import {clearCachedSessionData, loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
 import {Session} from "@/types/firestore/sessions/session";
+import {SuccessComponent} from "@/components/StatusComponents/SuccessComponent";
+import {ErrorComponent} from "@/components/StatusComponents/ErrorComponent";
+import Link from "next/link";
 
 // Whoever authenticates the google account is the organizer, need to pass the session object details into the authentication page
 const passToken = async (accessToken: string, sessionObj: Partial<Session>) => {
-  const res = await fetch('/api/auth', {
+  return await fetch('/api/auth', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({...sessionObj, accessToken}),
   });
-
-  if (res.ok) {
-    // TODO add a success alert box
-    console.log('Email sent successfully', res.status);
-  } else {
-    // TODO add an error alert box
-    console.error('Failed to send email: Error(', res.status, ') ', res.statusText);
-    // Handle error
-  }
-
 }
 
 async function SessionDetailsParams() {
@@ -52,13 +45,19 @@ async function SessionDetailsParams() {
     }
     try {
       const sessionData = loadCachedSessionData();
-      passToken(accessToken, sessionData);
-      setApiStatus('success');
+      passToken(accessToken, sessionData).then((response) => {
+        if (response.ok) {
+          setApiStatus('success');
+        } else {
+          console.log('Error in sending email', response.status, response.statusText)
+          setApiStatus('error');
+        }
+      });
     } catch (e) {
-      console.error(e);
-      setApiStatus('error')
+      console.log('Error in sending email reached catch block')
     } finally {
       setIsLoading(false);
+      clearCachedSessionData();
     }
   }, [accessToken]);
 
@@ -67,12 +66,16 @@ async function SessionDetailsParams() {
   }
 
   if (apiStatus === 'success') {
-    return <div>Success</div>;
+    return <SuccessComponent/>;
   } else if (apiStatus === 'error') {
-    return <div>Session Failed to Create</div>;
+    return <ErrorComponent/>;
   }
 
-  return <div>Nothing page</div>
+  return <div>Something really went wrong if you are seeing this. Please email {' '}
+    <Link
+    href='mailto:czhang2003@gmail.com'>czhang2003@gmail.com
+    </Link>
+  </div>
 }
 
 function Page() {

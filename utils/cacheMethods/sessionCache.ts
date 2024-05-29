@@ -23,3 +23,7 @@ export function loadCachedSessionData() {
     return undefined;
   }
 }
+
+export function clearCachedSessionData() {
+  localStorage.removeItem('sessionData');
+}

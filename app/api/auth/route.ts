@@ -1,10 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next"
-import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod"
-import {redirect} from "next/navigation";
-import {google} from "googleapis";
-import {loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
-
 interface SessionObjectProps {
   coachId: string;
   coachName: string;
@@ -20,29 +13,29 @@ interface SessionObjectProps {
   accessToken: string;
 }
 
-async function createCalendarAppointment(sessionObj : SessionObjectProps) {
+async function createCalendarAppointment(sessionObj: SessionObjectProps) {
   const event = {
-        'summary': `MentorMeets | 1-on-1 Session with ${sessionObj.menteeName} & ${sessionObj.coachName}`,
-        'location': sessionObj.link,
-        'description': sessionObj.message,
-        'start': {
-            'dateTime': sessionObj.date,
-        },
-        'end': {
-            'dateTime': '2024-05-28T17:00:00-07:00',
-        },
-        'attendees': [
-            {'email': sessionObj.coachEmail},
-            {'email': sessionObj.menteeEmail},
-        ],
-        'reminders': {
-            'useDefault': false,
-            'overrides': [
-                {'method': 'email', 'minutes': 24 * 60},
-                {'method': 'popup', 'minutes': 10},
-            ],
-        },
-    }
+    'summary': `MentorMeets | 1-on-1 Session with ${sessionObj.menteeName} & ${sessionObj.coachName}`,
+    'location': sessionObj.link,
+    'description': sessionObj.message,
+    'start': {
+      'dateTime': sessionObj.date,
+    },
+    'end': {
+      'dateTime': '2024-05-28T17:00:00-07:00',
+    },
+    'attendees': [
+      {'email': sessionObj.coachEmail},
+      {'email': sessionObj.menteeEmail},
+    ],
+    'reminders': {
+      'useDefault': false,
+      'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+      ],
+    },
+  }
 
 
   const apiUrl = new URL(
@@ -52,7 +45,7 @@ async function createCalendarAppointment(sessionObj : SessionObjectProps) {
   apiUrl.searchParams.set("sendNotifications", "true")
   apiUrl.searchParams.set("conferenceDataVersion", "1")
 
-  const response = await fetch(apiUrl, {
+  return await fetch(apiUrl, {
     cache: "no-cache",
     method: "POST",
     headers: {
@@ -61,21 +54,17 @@ async function createCalendarAppointment(sessionObj : SessionObjectProps) {
     },
     body: JSON.stringify(event),
   })
-  console.log(response);
-  return response;
 }
 
 
-export async function POST(req : Request) {
-  console.log("API CALL POST")
-  try {
-    const accessToken = await req.json();
+export async function POST(req: Request) {
+  const accessToken = await req.json();
 
-    await createCalendarAppointment(accessToken);
+  const response = await createCalendarAppointment(accessToken);
 
-    return Response.json({data: 'Email sent'});
-  } catch (error) {
-    console.log(error)
-    return Response.error();
+  if (response.ok) {
+    return Response.json({status: "success"});
+  } else {
+    return Response.json({status: "error"}, {status: response.status, statusText: response.statusText})
   }
 }

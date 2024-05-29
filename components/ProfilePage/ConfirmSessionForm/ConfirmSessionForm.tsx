@@ -211,7 +211,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
                 // Render the spinner instead of 'Send message'
                 <Loader size="sm"/>
               ) : (
-                'Authenticate Google Calendar'
+                'Create Google Calendar Event'
               )}
             </Button>
           </Group>
