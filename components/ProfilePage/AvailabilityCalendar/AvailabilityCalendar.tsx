@@ -45,7 +45,7 @@ export function AvailabilityCalendar({
       locale: 'ru',
       firstDayOfWeek: 0,
       weekendDays: [0],
-      timezone: 'UTC',
+      timezone: undefined,
     }}
     >
       <div style={{
