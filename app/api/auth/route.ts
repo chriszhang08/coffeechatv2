@@ -13,6 +13,20 @@ interface SessionObjectProps {
   accessToken: string;
 }
 
+function getEndTime(date: string, sessionDetails: string) : string {
+  const dateObj = new Date(date);
+  let duration;
+  if (sessionDetails === 'resume') {
+    duration = 15;
+  } else if (sessionDetails === 'interview') {
+    duration = 45;
+  } else {
+    duration = 60;
+  }
+  dateObj.setMinutes(dateObj.getMinutes() + duration);
+  return dateObj.toISOString();
+}
+
 async function createCalendarAppointment(sessionObj: SessionObjectProps) {
   const event = {
     'summary': `MentorMeets | 1-on-1 Session with ${sessionObj.menteeName} & ${sessionObj.coachName}`,
@@ -22,7 +36,7 @@ async function createCalendarAppointment(sessionObj: SessionObjectProps) {
       'dateTime': sessionObj.date,
     },
     'end': {
-      'dateTime': '2024-05-28T17:00:00-07:00',
+      'dateTime': getEndTime(sessionObj.date, sessionObj.sessionDetails),
     },
     'attendees': [
       {'email': sessionObj.coachEmail},

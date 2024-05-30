@@ -11,4 +11,5 @@ export interface Coach {
   bio: string;
   rating: number;
   numSessions: number;
+  link: string;
 }

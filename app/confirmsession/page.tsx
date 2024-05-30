@@ -71,7 +71,7 @@ async function SessionDetailsParams() {
     return <ErrorComponent/>;
   }
 
-  return <div>Something really went wrong if you are seeing this. Please email {' '}
+  return <div>Oop, easter egg! Hopefully this message goes away in a sec. If not, please email {' '}
     <Link
     href='mailto:czhang2003@gmail.com'>czhang2003@gmail.com
     </Link>

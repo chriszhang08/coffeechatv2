@@ -22,8 +22,7 @@ import {Coach} from '@/types/firestore/coaches/coach';
 import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
 import {createSession} from "@/utils/sessionMethods";
 import {oauthSignIn} from "@/utils/oauth";
-import { useHash } from '@mantine/hooks';
-import {cacheSessionData, loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
+import {cacheSessionData} from "@/utils/cacheMethods/sessionCache";
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
@@ -66,8 +65,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const [isLoadingGcal, setIsLoadingGcal] = useState(false);
 
   const icon = <IconInfoCircle/>;
-
-  const router = useRouter();
 
   const coachData = usePublicCoachData(coachId);
   useEffect(() => {
@@ -113,7 +110,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       menteePhone: form.values.phone,
       message: form.values.message,
       date: date,
-      link: 'https://meet.google.com/abc-123-def',
+      link: coach?.link,
       sessionDetails: type,
       price: getPrice(type, coach),
     };
@@ -122,7 +119,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       cacheSessionData(sessionData);
       oauthSignIn();
       const sessionId = await createSession(sessionData);
-
     } catch (e) {
       console.log('Error adding document: ', e);
     } finally {
