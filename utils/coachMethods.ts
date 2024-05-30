@@ -1,8 +1,9 @@
 import {addDoc, collection, doc, getDocs, setDoc} from 'firebase/firestore';
 import { Coach } from '@/types/firestore/coaches/coach';
 import { Comment } from '@/types/firestore/coaches/comments/comment';
-import { db } from '@/firebase.config';
+import { db, storage } from '@/firebase.config';
 import { getFirestoreDoc } from '@/utils/firestoreAnalytics';
+import {getDownloadURL, ref} from "@firebase/storage";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -20,10 +21,10 @@ export async function getPublicCoachData(
 }
 
 export async function getComments(coachId: string): Promise<Comment[]> {
-  
+
   // For comment debugging -> adds delay for fetching the comments
   // await new Promise(resolve => setTimeout(resolve, 5000));
-  
+
   const collectionRef = collection(db, `coaches/${coachId}/comments`);
   const snapshot = await getDocs(collectionRef);
   if (!snapshot.empty) {
@@ -58,4 +59,29 @@ export async function updateCoachProfileValues(
     return setDoc(coachRef, updatedProfileValues, { merge: true });
   }
   return setDoc(doc(db, 'coaches', coachId), profileValues, { merge: true });
+}
+
+export async function getResumeFromStorage(coachId: string): Promise<string> {
+  getDownloadURL(ref(storage, '/Chris_Zhang_UMSI_Resume.pdf'))
+    .then((url) => {
+      // `url` is the download URL for 'images/stars.jpg'
+
+      // This can be downloaded directly:
+      const xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.onload = (event) => {
+        const blob = xhr.response;
+      };
+      xhr.open('GET', url);
+      xhr.send();
+
+      // Or inserted into an <img> element
+      const img = document.getElementById('myimg');
+      // img.setAttribute('src', url);
+      return url;
+    })
+    .catch((error) => {
+      // Handle any errors
+    });
+  return "didnt work";
 }
