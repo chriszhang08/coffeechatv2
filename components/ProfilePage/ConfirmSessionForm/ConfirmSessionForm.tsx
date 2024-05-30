@@ -1,4 +1,18 @@
-import {Alert, Button, Card, Container, Group, SimpleGrid, Text, Textarea, TextInput, Title,} from '@mantine/core';
+'use client'
+
+import {
+  Alert,
+  Button,
+  Card,
+  Container,
+  Group,
+  Loader,
+  SimpleGrid,
+  Text,
+  Textarea,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useRouter} from 'next/navigation';
 import React, {useEffect, useState} from 'react';
@@ -7,6 +21,9 @@ import {usePublicCoachData} from '@/hooks/useCoachData';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {formatTimeStringLocal, isoStringToDate} from "@/utils/dateMethods";
 import {createSession} from "@/utils/sessionMethods";
+import {oauthSignIn} from "@/utils/oauth";
+import { useHash } from '@mantine/hooks';
+import {cacheSessionData, loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
 
 interface ConfirmSessionFormProps {
   coachId: string | null;
@@ -46,6 +63,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const [coach, setCoach] = useState<Coach | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoadingGcal, setIsLoadingGcal] = useState(false);
 
   const icon = <IconInfoCircle/>;
 
@@ -53,6 +71,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
 
   const coachData = usePublicCoachData(coachId);
   useEffect(() => {
+
     const handleResize = () => {
       if (typeof window !== 'undefined') {
         setIsMobile(window.innerWidth <= 768);
@@ -84,9 +103,11 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
   const date = isoStringToDate(time);
 
   const handleSubmit = async () => {
+    setIsLoadingGcal(true);
     let sessionData = {
       coachId: coachId,
       coachName: coach?.name,
+      coachEmail: coach?.email,
       menteeName: form.values.name,
       menteeEmail: form.values.email,
       menteePhone: form.values.phone,
@@ -96,25 +117,16 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       sessionDetails: type,
       price: getPrice(type, coach),
     };
-    try {
-      const sessionId = await createSession(sessionData);
-      const response = await fetch('/api/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({...sessionData, sessionId: sessionId}),
-      });
 
-      if (response.ok) {
-        router.push('/success');
-        // Handle success
-      } else {
-        console.error('Failed to send email: Error(', response.status, ') ', response.statusText);
-        // Handle error
-      }
+    try {
+      cacheSessionData(sessionData);
+      oauthSignIn();
+      const sessionId = await createSession(sessionData);
+
     } catch (e) {
       console.log('Error adding document: ', e);
+    } finally {
+      setIsLoadingGcal(false);
     }
   };
 
@@ -134,7 +146,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       >
         Confirm Session
       </Title>
-      <SimpleGrid cols={isMobile ? 1 : 2} style={{ paddingTop: 50 }}>
+      <SimpleGrid cols={isMobile ? 1 : 2} style={{paddingTop: 50}}>
         <Card withBorder radius="md" style={{width: 400}}>
           <Title order={2}>
             Session Information
@@ -194,8 +206,13 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           />
 
           <Group justify="center" mt="xl">
-            <Button type="submit" size="md">
-              Send message
+            <Button type="submit" size="md" disabled={isLoadingGcal}>
+              {isLoadingGcal ? (
+                // Render the spinner instead of 'Send message'
+                <Loader size="sm"/>
+              ) : (
+                'Create Google Calendar Event'
+              )}
             </Button>
           </Group>
         </Container>
