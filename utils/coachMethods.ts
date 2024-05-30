@@ -1,8 +1,9 @@
 import {addDoc, collection, doc, getDocs, setDoc} from 'firebase/firestore';
-import { Coach } from '@/types/firestore/coaches/coach';
-import { Comment } from '@/types/firestore/coaches/comments/comment';
-import { db } from '@/firebase.config';
-import { getFirestoreDoc } from '@/utils/firestoreAnalytics';
+import {Coach} from '@/types/firestore/coaches/coach';
+import {Comment} from '@/types/firestore/coaches/comments/comment';
+import {db, storage} from '@/firebase.config';
+import {getFirestoreDoc} from '@/utils/firestoreAnalytics';
+import {getDownloadURL, ref} from "@firebase/storage";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -20,10 +21,10 @@ export async function getPublicCoachData(
 }
 
 export async function getComments(coachId: string): Promise<Comment[]> {
-  
+
   // For comment debugging -> adds delay for fetching the comments
   // await new Promise(resolve => setTimeout(resolve, 5000));
-  
+
   const collectionRef = collection(db, `coaches/${coachId}/comments`);
   const snapshot = await getDocs(collectionRef);
   if (!snapshot.empty) {
@@ -58,4 +59,13 @@ export async function updateCoachProfileValues(
     return setDoc(coachRef, updatedProfileValues, { merge: true });
   }
   return setDoc(doc(db, 'coaches', coachId), profileValues, { merge: true });
+}
+
+export async function getResumeFromStorage(coachId : string): Promise<string | null> {
+  try {
+    return await getDownloadURL(ref(storage, `/${coachId}.pdf`));
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 }

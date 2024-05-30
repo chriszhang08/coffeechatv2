@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Center, Group, Rating, SimpleGrid, Stack, Text, Textarea, Title } from '@mantine/core';
 import { CommentHtml } from '@/components/Comments/CommentHtml';
-import fakeComments from '@/data/mock-data/fakeComments';
 import classes from './CommentStack.module.css';
 import { useCoachCommentData } from '@/hooks/useCoachData';
 
