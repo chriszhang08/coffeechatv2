@@ -10,7 +10,9 @@ export function oauthSignIn() {
   // Parameters to pass to OAuth 2.0 endpoint.
   const params = {
     'client_id': process.env.GOOGLE_OAUTH_CLIENT_ID,
-    'redirect_uri': 'http://localhost:3000/confirmsession',
+    'redirect_uri': process.env.NEXT_PUBLIC_ENV === 'dev'
+        ? 'http://localhost:8080/oauth2callback'
+        : 'https://coffeechat-nine.vercel.app/confirmsession',
     'response_type': 'token',
     'scope': 'https://www.googleapis.com/auth/calendar',
     'include_granted_scopes': 'true',
