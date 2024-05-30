@@ -55,7 +55,6 @@ export function AvailabilityModal({
   }, []);
 
   const availability = filterAvailability(convertHextoAvailArray(threedayAvailability), typeofSession);
-
   const rows = availability.map((time, index) => (
     time === 1 && (
       <Grid.Col span={4} key={index}>
@@ -86,9 +85,11 @@ export function AvailabilityModal({
       width: isMobile ? '80%' : '100%',
     }}
     > {/* Change the maxHeight to your desired value */}
+    {rowsHeight !== 0 && (
       <div>
         Times are in {Intl.DateTimeFormat().resolvedOptions().timeZone} time zone
       </div>
+    )}
       <Grid style={{
         paddingTop: 20,
         height: rowsHeight > 400 ? '100%' : 'auto',
