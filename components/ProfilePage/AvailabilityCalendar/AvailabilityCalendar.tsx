@@ -61,6 +61,7 @@ export function AvailabilityCalendar({
           value={selected}
           onChange={setSelected}
           getDayProps={getDayProps}
+          minDate={new Date()}
           allowDeselect
           hideOutsideDates
         />
