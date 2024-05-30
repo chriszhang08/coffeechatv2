@@ -1,10 +1,12 @@
 'use client';
 
-import { IconBookmark } from '@tabler/icons-react';
-import { Card, Image, Text, Group, Badge, Button, ActionIcon, Tooltip, List } from '@mantine/core';
-import React from 'react';
+import {IconBookmark} from '@tabler/icons-react';
+import {ActionIcon, Badge, Box, Button, Card, Group, Image, List, Text, Tooltip} from '@mantine/core';
+import React, {useEffect, useState} from 'react';
 import classes from './ProfileBadge.module.css';
-import { Coach } from '@/types/firestore/coaches/coach';
+import {Coach} from '@/types/firestore/coaches/coach';
+import {getResumeFromStorage} from "@/utils/coachMethods";
+import Link from 'next/link';
 
 const mockdata = {
   image:
@@ -35,6 +37,39 @@ interface ProfileBadgeProps {
   onClickHandler: (value: string) => void;
 }
 
+function ResumeButton({coachId}: { coachId: string }) {
+  const [link, setLink] = useState<string | null>(null);
+
+  useEffect(() => {
+    const generateLinkAsync = async () => {
+      const generatedLink = await getResumeFromStorage(coachId);
+      setLink(generatedLink);
+    };
+
+    generateLinkAsync();
+  }, []);
+
+  return (
+    <Box style={{width: '100%'}}>
+      {
+        link ? (
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            <Button radius="md" style={{flex: 1, width: '100%'}} component="a">
+              See Resume
+            </Button>
+          </a>
+        ) : (
+          <Tooltip label={'Resume not available'} position="top">
+            <Button radius="md" style={{flex: 1, width: '100%'}} disabled={true} component="a">
+              See Resume
+            </Button>
+          </Tooltip>
+        )
+      }
+    </Box>
+  )
+}
+
 const ProfileBadge: React.FC<ProfileBadgeProps> =
   ({
      coachObj,
@@ -58,7 +93,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
     return (
       <Card p="md" className={classes.card}>
         <Card.Section>
-          <Image src={image} height={180} />
+          <Image src={image} height={180}/>
         </Card.Section>
 
         <Card.Section className={classes.section} mt="md">
@@ -116,14 +151,8 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
             <List.Item>McKinsey Practice Cases</List.Item>
           </List>
         </Card.Section>
-
         <Group mt="xs">
-          <Button radius="md" style={{ flex: 1 }}>
-            See Resume
-          </Button>
-          <ActionIcon variant="default" radius="md" size={36}>
-            <IconBookmark className={classes.like} stroke={1.5} />
-          </ActionIcon>
+          <ResumeButton coachId={coachObj.cidAuth}/>
         </Group>
       </Card>
     );
