@@ -9,9 +9,10 @@ import {convertHextoAvailArray, indexmapToLocaltime, timeslotToUTCstr} from "@/u
 // Check if two dates are the same
 function isSameDay(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear() &&
-         date1.getMonth() === date2.getMonth() &&
-         date1.getDate() === date2.getDate();
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate();
 }
+
 // Filter the availability based on the type of session
 function filterAvailability(availability: number[], typeofSession: string | null, selectedDate: Date): number[] {
   let lengthOfSession = 1;
@@ -24,8 +25,7 @@ function filterAvailability(availability: number[], typeofSession: string | null
   const now = new Date();
   const currentHour = now.getHours();
   const currentMin = now.getMinutes();
-  const formattedTime = (currentHour * 4) + Math.floor(currentMin / 15)
-  console.log(isSameDay(now, selectedDate))
+  const formattedTime = (currentHour * 4) + Math.floor(currentMin / 15) + 2; // plus 2 to give coaches a 30 min buffer
   return availability.map((time, index) => {
     if (time === 1) { // If the current slot is available
       // eslint-disable-next-line no-plusplus
@@ -34,7 +34,7 @@ function filterAvailability(availability: number[], typeofSession: string | null
           return 0; // Mark the current slot as unavailable
         }
       }
-      if(isSameDay(now, selectedDate) && index < formattedTime){
+      if (isSameDay(now, selectedDate) && index <= formattedTime) {
         return 0;
       }
       return 1; // Otherwise, the slot is available
@@ -98,11 +98,11 @@ export function AvailabilityModal({
       width: isMobile ? '80%' : '100%',
     }}
     > {/* Change the maxHeight to your desired value */}
-    {rowsHeight !== 0 && (
-      <div>
-        Times are in {Intl.DateTimeFormat().resolvedOptions().timeZone} time zone
-      </div>
-    )}
+      {rowsHeight !== 0 && (
+        <div>
+          Times are in {Intl.DateTimeFormat().resolvedOptions().timeZone} time zone
+        </div>
+      )}
       <Grid style={{
         paddingTop: 20,
         height: rowsHeight > 400 ? '100%' : 'auto',
@@ -110,6 +110,11 @@ export function AvailabilityModal({
       >
         {rows}
       </Grid>
+      {rowsHeight === 0 && (
+        <div>
+          There are no more available times for that day.
+        </div>
+      )}
     </div>
   );
 }
