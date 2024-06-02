@@ -5,6 +5,7 @@ import { Card, Image, Text, Group, Badge, Button, ActionIcon, Rating } from '@ma
 import Link from 'next/link';
 import classes from './ProfileBadge.module.css';
 import {Coach} from "@/types/firestore/coaches/coach";
+import { useGetImageUrl } from '@/hooks/useCoachData';
 
 export function ProfileBadgeSnapshot({
                                        person,
@@ -12,10 +13,17 @@ export function ProfileBadgeSnapshot({
   person: Partial<Coach>;
 }) {
 
+  const imgPath = `${person.cidAuth}_avatar.png`;
+  console.log(imgPath)
+  const imageUrl = useGetImageUrl(imgPath);
   return (
     <Card p="md" className={classes.cardsnap}>
       <Card.Section>
-        {/*<Image src={avatar} alt={name} height={180} />*/}
+         {imageUrl ? (
+          <Image src={imageUrl} alt={person.name} height={180} />
+        ) : (
+          <p>Loading image...</p>
+        )}
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">

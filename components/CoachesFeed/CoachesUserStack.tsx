@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Grid, Select, Table, TagsInput } from '@mantine/core';
 import fakePeople from '@/data/mock-data/fakePeople';
 import { ProfileBadgeSnapshot } from '@/components/ProfilePage/ProfileBadge/ProfileBadgeSnapshot';
+import { useGetFiveCoaches } from '@/hooks/useCoachData';
 
 export function CoachesUserStack() {
   const [sortBy, setSortBy] = useState('default');
@@ -24,15 +25,19 @@ export function CoachesUserStack() {
     setTagsShow(tags);
   };
 
-  const filteredCoaches =
-    tagsShown.length === 0
-      ? fakePeople
-      : fakePeople.filter((person) =>
-        tagsShown.every((tag) => person.tags.includes(tag))
-      );
+  const coaches = useGetFiveCoaches();
 
+  const filteredCoaches = 
+      !coaches 
+        ? [] 
+        : (tagsShown.length === 0 
+            ? coaches 
+            : coaches.filter((person) => 
+                tagsShown.every((tag) => person.subjects.includes(tag))
+            )
+          );
+ 
   const sortedPeople = [...filteredCoaches]; // Make a copy of the array to avoid mutating the original
-
   // Function to sort the people array based on different criteria
   const sortPeople = (sortByCriteria: string) => {
     if (sortByCriteria === 'default') {
@@ -41,7 +46,7 @@ export function CoachesUserStack() {
     } else if (sortByCriteria === 'name') {
       sortedPeople.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortByCriteria === 'age') {
-      sortedPeople.sort((a, b) => a.rate - b.rate);
+      sortedPeople.sort((a, b) => a.rating - b.rating);
     }
   };
 
@@ -49,7 +54,7 @@ export function CoachesUserStack() {
   sortPeople(sortBy);
 
   const rows = sortedPeople.map((person) => (
-    <Grid.Col span={4} key={person.id}>
+    <Grid.Col span={4} key={person.cidAuth}>
       <ProfileBadgeSnapshot person={person} />
     </Grid.Col>
   ));
