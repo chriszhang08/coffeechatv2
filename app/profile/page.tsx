@@ -9,6 +9,7 @@ import { AvailabilityCalendar } from '@/components/ProfilePage/AvailabilityCalen
 import { HeaderSearch } from '@/components/Navbar/Header';
 import { usePublicCoachData } from '@/hooks/useCoachData';
 import { Coach } from '@/types/firestore/coaches/coach';
+import Link from "next/link";
 
 function CoachProfileSearch() {
   const searchParams = useSearchParams();
@@ -48,21 +49,23 @@ function CoachProfileSearch() {
           selectedButtonState={selectedButton}
         />
       </div>
-      <div id="mobile-comments">
-        <CommentStack coachId={coachId} />
-      </div>
+      {/*<div id="mobile-comments">*/}
+      {/*  <CommentStack coachId={coachId} />*/}
+      {/*</div>*/}
     </div>
   );
 }
 
 function Page() {
   return (
-    <>
-      <HeaderSearch />
-      <Suspense>
+    <div className='paddingContainer'>
+      <Link href={'/'}>
+        <img src="/logo.svg" alt="Logo" className="logo" />
+      </Link>
+      <Suspense fallback={<div>Loading...</div>}>
         <CoachProfileSearch />
       </Suspense>
-    </>
+    </div>
   );
 }
 

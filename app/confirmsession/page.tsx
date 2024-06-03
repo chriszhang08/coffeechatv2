@@ -81,7 +81,6 @@ async function SessionDetailsParams() {
 function Page() {
   return (
     <>
-      <HeaderSearch/>
       <div style={{
         display: 'flex',
         flexDirection: 'column',

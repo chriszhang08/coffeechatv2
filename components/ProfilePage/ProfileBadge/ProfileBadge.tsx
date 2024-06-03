@@ -1,35 +1,12 @@
 'use client';
 
-import {IconBookmark} from '@tabler/icons-react';
-import {ActionIcon, Badge, Box, Button, Card, Group, Image, List, Text, Tooltip} from '@mantine/core';
+import { Badge, Box, Button, Card, Group, Image, List, Text, Tooltip} from '@mantine/core';
 import React, {useEffect, useState} from 'react';
 import classes from './ProfileBadge.module.css';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {getResumeFromStorage} from "@/utils/coachMethods";
-import Link from 'next/link';
+import { useGetImageUrl } from '@/hooks/useCoachData';
 
-const mockdata = {
-  image:
-    'https://images.unsplash.com/photo-1437719417032-8595fd9e9dc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=80',
-  title: 'Chris Zhang',
-  status: 'Expert Coach',
-  description:
-    'Former Oracle, Google, Meta | Incoming at CCI.  Energy Trading, Quantitative Analyst, Data Science.  Recipient of Presidential Scholar Award',
-  badges: [
-    {
-      emoji: '☀️',
-      label: 'Astrology',
-    },
-    {
-      emoji: '🦓',
-      label: 'Zoology',
-    },
-    {
-      emoji: '🤽',
-      label: 'Physics',
-    },
-  ],
-};
 
 interface ProfileBadgeProps {
   coachObj: Coach | null;
@@ -80,9 +57,9 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
       return null;
     }
 
-    const {
-      image,
-    } = mockdata;
+    const imgPath = `${coachObj.cidAuth}_avatar.png`;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const imageUrl = useGetImageUrl(imgPath);
 
     const subjectTags = coachObj.subjects.map((subject, index) => (
       <Badge variant="light" key={index}>
@@ -93,7 +70,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
     return (
       <Card p="md" className={classes.card}>
         <Card.Section>
-          <Image src={image} height={180}/>
+          <Image src={imageUrl} height={180}/>
         </Card.Section>
 
         <Card.Section className={classes.section} mt="md">
@@ -103,7 +80,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
             </Text>
             <Tooltip label="50+ sessions coached" position="top">
               <Badge size="sm" variant="light">
-                Expert Coach
+                Expert Mentor
               </Badge>
             </Tooltip>
           </Group>
@@ -119,7 +96,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
           <Text mt="md" className={classes.label} c="dimmed">
             Sessions Offered
           </Text>
-          <Group gap={7} mt={5}>
+          {/* <Group gap={7} mt={5}>
             <Tooltip label="15 minute session where we review your resume" position="top">
               <Button
                 variant={selectedButtonState === 'resume' ? 'filled' : 'light'}
@@ -136,19 +113,26 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
                 Mock Interview | $50
               </Button>
             </Tooltip>
+          </Group> */}
+          <Group mt={5}>
+            <Tooltip label="1:1 Coaching session with the mentor" position="top">
+              <Button
+                variant={selectedButtonState === 'resume' ? 'filled' : 'light'}
+                onClick={() => onClickHandler('resume')}
+              >
+                1:1 Mentorship | Free
+              </Button>
+            </Tooltip>
           </Group>
 
         </Card.Section>
 
         <Card.Section className={classes.section}>
           <Text mt="md" className={classes.label} c="dimmed">
-            Materials
+            Expertise
           </Text>
           <List>
-            <List.Item>AI Resume Parser</List.Item>
-            <List.Item>FantasyFootballAnalyst</List.Item>
-            <List.Item>Google 2024 Interview Questions</List.Item>
-            <List.Item>McKinsey Practice Cases</List.Item>
+            {/*TODO - Add expertise from firestore*/}
           </List>
         </Card.Section>
         <Group mt="xs">

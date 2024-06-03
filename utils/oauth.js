@@ -11,7 +11,7 @@ export function oauthSignIn() {
   const params = {
     'client_id': process.env.GOOGLE_OAUTH_CLIENT_ID,
     'redirect_uri': process.env.NEXT_PUBLIC_ENV === 'dev'
-        ? 'http://localhost:8080/oauth2callback'
+        ? 'http://localhost:3000/confirmsession'
         : 'https://coffeechat-nine.vercel.app/confirmsession',
     'response_type': 'token',
     'scope': 'https://www.googleapis.com/auth/calendar',

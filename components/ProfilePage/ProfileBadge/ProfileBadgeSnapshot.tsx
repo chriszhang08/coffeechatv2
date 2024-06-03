@@ -1,7 +1,7 @@
 'use client';
 
 import { IconBookmark } from '@tabler/icons-react';
-import { Card, Image, Text, Group, Badge, Button, ActionIcon, Rating } from '@mantine/core';
+import { Card, Image, Text, Group, Badge, Button, ActionIcon, Rating, Paper } from '@mantine/core';
 import Link from 'next/link';
 import classes from './ProfileBadge.module.css';
 import {Coach} from "@/types/firestore/coaches/coach";
@@ -19,7 +19,7 @@ export function ProfileBadgeSnapshot({
   return (
     <Card p="md" className={classes.cardsnap}>
       <Card.Section>
-         {imageUrl ? (
+        {imageUrl ? (
           <Image src={imageUrl} alt={person.name} height={180} />
         ) : (
           <p>Loading image...</p>
@@ -32,31 +32,36 @@ export function ProfileBadgeSnapshot({
             {person?.name}
           </Text>
           <Rating fractions={2} value={person?.rating} readOnly />
-          <Text fz="xs" c="dimmed">
+          {/* <Text fz="xs" c="dimmed">
             {person?.numSessions} reviews
-          </Text>
+          </Text> */}
         </Group>
         <Text fz="sm" mt="xs">
           {person?.bio}
         </Text>
       </Card.Section>
 
-      <Card.Section className={classes.section}>
-        {/*<Group gap={7} mt={5}>*/}
-        {/*  {features}*/}
-        {/*</Group>*/}
-      </Card.Section>
+      {/* <Card.Section className={classes.section}>
+        <Group gap={7} mt={5}>
+          {person.subjects && person.subjects.length > 0 && (
+            person.subjects.map((subject, index) => (
+              <Paper shadow="sm" p="m" key={index}>
+                <Text>{subject}</Text>
+              </Paper>
+            ))
+          )}
+        </Group>
+      </Card.Section> */}
 
       <Group mt="xs">
-        {/*TODO change the coachId to be dynamic*/}
-        <Link href="/profile?coachId=OeSeaw9yVEEFmMtqkxFZ" passHref style={{ flex: 1 }}>
+        <Link href={`/profile?coachId=${person.cidAuth}`} passHref style={{ flex: 1 }}>
           <Button radius="md">
             Book Session
           </Button>
         </Link>
-        <ActionIcon variant="default" radius="md" size={36}>
+        {/* <ActionIcon variant="default" radius="md" size={36}>
           <IconBookmark className={classes.like} stroke={1.5} />
-        </ActionIcon>
+        </ActionIcon> */}
       </Group>
     </Card>
   );
