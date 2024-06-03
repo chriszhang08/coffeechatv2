@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import ConfirmSessionForm from '@/components/ProfilePage/ConfirmSessionForm/ConfirmSessionForm';
 import { HeaderSearch } from '@/components/Navbar/Header';
+import {Center} from "@mantine/core";
 
 function ConfirmSessionParams() {
   const searchParams = useSearchParams();
@@ -18,7 +19,9 @@ function ConfirmSessionParams() {
 function Page() {
   return (
     <>
-      <HeaderSearch />
+      <Center>
+        <img src="/logoname.svg" alt="Logo" style={{ width: '100%', maxWidth: '600px', height: 'auto' }} />
+      </Center>
       <div style={{
         display: 'flex',
         flexDirection: 'column',

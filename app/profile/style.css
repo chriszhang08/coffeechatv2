@@ -12,12 +12,35 @@
   justify-content: center;
 }
 
+.logo {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.paddingContainer {
+  padding-top: 30px;
+}
+
+@media (max-width: 900px) {
+  .logo {
+    display: none;
+  }
+}
+
 @media (max-width: 600px) {
   * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+  .paddingContainer {
+    padding-top: 0;
+  }
+
   #column {
     display: flex;
     flex-direction: column;

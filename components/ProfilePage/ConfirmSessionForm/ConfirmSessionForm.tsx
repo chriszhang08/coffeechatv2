@@ -31,13 +31,14 @@ interface ConfirmSessionFormProps {
 }
 
 function getPrice(type: string | null, coach: Coach | null) {
-  if (type === null) {
-    return '0';
-  } else if (type === 'interview') {
-    return '$50';
-  } else {
-    return '$30'
-  }
+  return "Free";
+  // if (type === null) {
+  //   return '0';
+  // } else if (type === 'interview') {
+  //   return '$50';
+  // } else {
+  //   return '$30'
+  // }
 }
 
 const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
@@ -133,15 +134,6 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
       handleSubmit();
     }}
     >
-      <Title
-        order={2}
-        size="h1"
-        style={{fontFamily: 'Greycliff CF, var(--mantine-font-family)'}}
-        fw={900}
-        ta="center"
-      >
-        Confirm Session
-      </Title>
       <SimpleGrid cols={isMobile ? 1 : 2} style={{paddingTop: 50}}>
         <Card withBorder radius="md" style={{width: 400}}>
           <Title order={2}>
@@ -151,18 +143,19 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
           <Text size="lg">{date.toDateString()}</Text>
           <Title order={5}>Time:</Title>
           <Text size="lg">{formatTimeStringLocal(date)}</Text>
-          <Title order={5}>Coach:</Title>
+          <Title order={5}>Mentor:</Title>
           <Text size="lg">{coach?.name}</Text>
           <Title order={5}>Session Type:</Title>
-          <Text size="lg">{type}</Text>
+          <Text size="lg">1:1 Mentorship</Text>
           <Title order={5}>Price:</Title>
           <Text size="lg">
             {getPrice(type, coach)}
           </Text>
           <Title order={5}>Meeting Link:</Title>
-          <Alert variant="light" color="blue" icon={icon}>
-            The Google Meet link will be generated after the coach confirms the session.
-          </Alert>
+          <a href={coach?.link}>{coach?.link}</a>
+          {/*<Alert variant="light" color="blue" icon={icon}>*/}
+          {/*  The Google Meet link will be generated after the coach confirms the session.*/}
+          {/*</Alert>*/}
         </Card>
 
         <Container style={{width: 300}}>
@@ -207,7 +200,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
                 // Render the spinner instead of 'Send message'
                 <Loader size="sm"/>
               ) : (
-                'Create Google Calendar Event'
+                'Confirm Session'
               )}
             </Button>
           </Group>
