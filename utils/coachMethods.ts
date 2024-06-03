@@ -1,4 +1,4 @@
-import {addDoc, collection, doc, getDocs, setDoc} from 'firebase/firestore';
+import {addDoc, collection, doc, getDocs, setDoc, query, limit} from 'firebase/firestore';
 import {Coach} from '@/types/firestore/coaches/coach';
 import {Comment} from '@/types/firestore/coaches/comments/comment';
 import {db, storage} from '@/firebase.config';
@@ -67,5 +67,29 @@ export async function getResumeFromStorage(coachId : string): Promise<string | n
   } catch (e) {
     console.error(e);
     return null;
+  }
+}
+
+export async function getFiveCoaches(): Promise<Coach[]> {
+  const coaches: Coach[] = [];
+  const collectionRef = collection(db, 'coaches');
+  const q = query(collectionRef, limit(5));
+  const snapshot = await getDocs(q);
+
+  snapshot.forEach(doc => {
+    if (doc.exists()){
+      coaches.push(doc.data() as Coach)
+    }
+  });
+  return coaches;
+}
+
+export async function getImageUrl(imagePath: string): Promise<string> {
+  try {
+    const url = await getDownloadURL(ref(storage, imagePath));
+    return url;
+  } catch (error) {
+    console.error('Failed to fetch image URL:', error);
+    throw error;
   }
 }

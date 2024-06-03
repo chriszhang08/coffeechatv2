@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getComments, getPublicCoachData } from '@/utils/coachMethods';
+import { getComments, getFiveCoaches, getImageUrl, getPublicCoachData } from '@/utils/coachMethods';
 
 export function usePublicCoachData(coachId: string | null) {
   const coachQuery = useQuery({
@@ -26,6 +26,36 @@ export function useCoachCommentData(coachId: string) {
   });
   if (commentQuery.data) {
     return commentQuery.data;
+  } else {
+    return null;
+  }
+}
+
+export function useGetFiveCoaches() {
+  const getFiveCoachesQuery = useQuery({
+    queryKey: ['coaches', 'top-five'],
+    queryFn: getFiveCoaches,
+    staleTime: Infinity
+  });
+
+  if (getFiveCoachesQuery.data){
+    return getFiveCoachesQuery.data;
+  }
+  else{
+    return null;
+  }
+}
+
+export function useGetImageUrl(imagePath: string | null) {
+  const imageQuery = useQuery({
+    queryKey: ['image', imagePath],
+    queryFn: () => getImageUrl(imagePath!),
+    enabled: !!imagePath,
+    staleTime: Infinity,
+  });
+
+  if (imageQuery.data) {
+    return imageQuery.data;
   } else {
     return null;
   }
