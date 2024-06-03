@@ -10,6 +10,7 @@ import { HeaderSearch } from '@/components/Navbar/Header';
 import { usePublicCoachData } from '@/hooks/useCoachData';
 import { Coach } from '@/types/firestore/coaches/coach';
 import Link from "next/link";
+import {FooterSimple} from "@/components/Navbar/FooterSimple";
 
 function CoachProfileSearch() {
   const searchParams = useSearchParams();
@@ -65,6 +66,7 @@ function Page() {
       <Suspense fallback={<div>Loading...</div>}>
         <CoachProfileSearch />
       </Suspense>
+      <FooterSimple />
     </div>
   );
 }

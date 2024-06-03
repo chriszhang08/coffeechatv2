@@ -4,6 +4,8 @@ import CoachesFeed from '@/components/CoachesFeed/CoachesUserStack';
 import NavbarSearch from '@/components/Navbar/Navbar';
 import styles from './Home.module.css';
 import {Center} from "@mantine/core";
+import {FooterSimple} from "@/components/Navbar/FooterSimple";
+import {Suspense} from "react";
 
 export default function HomePage() {
   return (
@@ -13,7 +15,10 @@ export default function HomePage() {
           <Center>
             <img src="/logoname.svg" alt="Logo" style={{ width: '100%', maxWidth: '600px', height: 'auto' }} />
           </Center>
-          <CoachesFeed />
+          <Suspense fallback={<div>loading...</div>}>
+            <CoachesFeed />
+          </Suspense>
+          <FooterSimple />
         </div>
       </div>
     </>
