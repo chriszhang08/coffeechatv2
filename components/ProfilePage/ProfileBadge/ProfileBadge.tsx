@@ -57,7 +57,7 @@ const ProfileBadge: React.FC<ProfileBadgeProps> =
       return null;
     }
 
-    const imgPath = `${coachObj.cidAuth}_avatar.png`;
+    const imgPath = `${coachObj.cidAuth}_avatar.jpg`;
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const imageUrl = useGetImageUrl(imgPath);
 

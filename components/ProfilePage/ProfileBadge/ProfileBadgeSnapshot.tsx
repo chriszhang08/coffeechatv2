@@ -13,7 +13,7 @@ export function ProfileBadgeSnapshot({
   person: Partial<Coach>;
 }) {
 
-  const imgPath = `${person.cidAuth}_avatar.png`;
+  const imgPath = `${person.cidAuth}_avatar.jpg`;
   console.log(imgPath)
   const imageUrl = useGetImageUrl(imgPath);
   return (
