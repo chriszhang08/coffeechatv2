@@ -74,6 +74,7 @@ export function AvailabilityModal({
         <Link
           href={`/profile/confirmsesh?coachId=${coachId}&time=${timeslotToUTCstr(date, index)}&type=${typeofSession}`}
           passHref
+          style={{textDecoration: "none"}}
         >
           <Button
             fullWidth
