@@ -6,10 +6,14 @@ import styles from './Home.module.css';
 import {Center} from "@mantine/core";
 import {FooterSimple} from "@/components/Navbar/FooterSimple";
 import {Suspense} from "react";
+import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeToggle';
 
 export default function HomePage() {
   return (
     <>
+    <header>
+      <ColorSchemeToggle/>
+    </header>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div className={styles.stack}>
           <Center>
