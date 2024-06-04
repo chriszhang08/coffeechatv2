@@ -11,9 +11,9 @@ import { ColorSchemeToggle } from '@/components/ColorSchemeToggle/ColorSchemeTog
 export default function HomePage() {
   return (
     <>
-    <header>
+    {/* <header>
       <ColorSchemeToggle/>
-    </header>
+    </header> */}
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div className={styles.stack}>
           <Center>
