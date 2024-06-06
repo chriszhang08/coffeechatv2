@@ -12,7 +12,7 @@ export function oauthSignIn() {
     'client_id': process.env.GOOGLE_OAUTH_CLIENT_ID,
     'redirect_uri': process.env.NEXT_PUBLIC_ENV === 'dev'
         ? 'http://localhost:3000/confirmsession'
-        : 'https://coffeechat-nine.vercel.app/confirmsession',
+        : 'https://www.mentormeets.live/confirmsession',
     'response_type': 'token',
     'scope': 'https://www.googleapis.com/auth/calendar',
     'include_granted_scopes': 'true',
