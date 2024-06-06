@@ -4,6 +4,7 @@ import {Comment} from '@/types/firestore/coaches/comments/comment';
 import {db, storage} from '@/firebase.config';
 import {getFirestoreDoc} from '@/utils/firestoreAnalytics';
 import {getDownloadURL, ref} from "@firebase/storage";
+import {convertHextoAvailArray} from "@/utils/dateMethods";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -33,6 +34,18 @@ export async function getComments(coachId: string): Promise<Comment[]> {
   return [];
 }
 
+// ORIGINAL FUNCTION, UNCOMMENT WHEN READY TO USE
+// export async function updateCoachAvailability(
+//   coachId: string | null,
+//   availability: string[],
+// ): Promise<void> {
+//   if (!coachId) {
+//     return;
+//   }
+//   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
+// }
+
+// NEW FUNCTION TO INJECT AVAILABILITY INTO A SPECIFIC DATE IN THE AVAILABILITY ARRAY
 export async function updateCoachAvailability(
   coachId: string | null,
   availability: string[],
@@ -40,6 +53,16 @@ export async function updateCoachAvailability(
   if (!coachId) {
     return;
   }
+
+  const startDate = new Date(2024, 5, 7);
+  const endDate = new Date(2024, 5, 16);
+
+  // Goal is to overwrite the availability array in between the start and end date
+
+  // first, create a new array with the new availability
+
+  // then overwrite the availability array passed in with the new availability array
+
   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
 }
 
