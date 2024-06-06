@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
-import {Center, Flex, Table} from '@mantine/core';
+import {Center, Flex, SimpleGrid, Table} from '@mantine/core';
 import fakePeople from '@/data/mock-data/fakePeople';
 import {ProfileBadgeSnapshot} from '@/components/ProfilePage/ProfileBadge/ProfileBadgeSnapshot';
 import {useGetFiveCoaches} from '@/hooks/useCoachData';
@@ -59,11 +59,11 @@ export function CoachesUserStack() {
 
   return (
     <Center>
-      <Table.ScrollContainer minWidth={1200}>
-        <Flex style={{paddingTop: 20}} justify={"space-around"}>
+      <SimpleGrid cols={3} style={{paddingTop: 20}} spacing={"xl"}>
+        {/* <Flex style={{paddingTop: 20}} justify={"space-around"}> */}
           {rows}
-        </Flex>
-      </Table.ScrollContainer>
+        {/* </Flex> */}
+      </SimpleGrid>
     </Center>
   );
 }
