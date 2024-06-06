@@ -18,7 +18,7 @@ const rows = Array.from({length: 24}, (_, i) => i);
 
 // TODO change this to the read value from the coach's availability from the database
 // TODO cache this on reload
-let yearlyAvailability = Array.from({length: 365}, () => '000000000FFFFFFFFF000000');
+let yearlyAvailability = Array.from({length: 365}, () => '000000000000000000000000');
 
 function convertCellValuesToHexString(cellValues: number[][]): string {
   const hexDigits = '0123456789ABCDEF';
@@ -183,44 +183,50 @@ export function EditAvailabilityCalendar({
   }
 
   return (
-    <DatesProvider settings={{
-      locale: 'ru',
-      firstDayOfWeek: 0,
-      weekendDays: [0],
-      timezone: 'UTC',
+    <Button onClick={() => {
+      mutation.mutate(yearlyAvailability);
     }}
     >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '400px',
-      }}
-      >
-        <h1 style={{textAlign: 'center'}}>Edit Daily Availability</h1>
-        <DatePicker
-          weekendDays={[]}
-          value={selected}
-          onChange={setSelectedCustom}
-          getDayProps={getDayProps}
-          allowDeselect
-          hideOutsideDates
-        />
-        {selected && (
-          <Stack>
-            <When2MeetTable cellValues={cellValues} setCellValues={setCellValues}/>
-            <Button onClick={handleSaveButton}>
-              Save availability for {selected.toUTCString()}
-            </Button>
-            <Button onClick={() => {
-              mutation.mutate(yearlyAvailability);
-            }}
-            >
-              Submit Availability Changes
-            </Button>
-          </Stack>
-        )}
-      </div>
-    </DatesProvider>
+      Submit Availability Changes
+    </Button>
+    // <DatesProvider settings={{
+    //   locale: 'ru',
+    //   firstDayOfWeek: 0,
+    //   weekendDays: [0],
+    //   timezone: 'UTC',
+    // }}
+    // >
+    //   <div style={{
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     alignItems: 'center',
+    //     width: '400px',
+    //   }}
+    //   >
+    //     <h1 style={{textAlign: 'center'}}>Edit Daily Availability</h1>
+    //     <DatePicker
+    //       weekendDays={[]}
+    //       value={selected}
+    //       onChange={setSelectedCustom}
+    //       getDayProps={getDayProps}
+    //       allowDeselect
+    //       hideOutsideDates
+    //     />
+    //     {selected && (
+    //       <Stack>
+    //         <When2MeetTable cellValues={cellValues} setCellValues={setCellValues}/>
+    //         <Button onClick={handleSaveButton}>
+    //           Save availability for {selected.toUTCString()}
+    //         </Button>
+    //         <Button onClick={() => {
+    //           mutation.mutate(yearlyAvailability);
+    //         }}
+    //         >
+    //           Submit Availability Changes
+    //         </Button>
+    //       </Stack>
+    //     )}
+    //   </div>
+    // </DatesProvider>
   );
 }

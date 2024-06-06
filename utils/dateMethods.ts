@@ -13,6 +13,31 @@ export function dailyAvailabilityToHex(dailyAvailability: number[]): string {
   return dailyAvailability.reduce((acc, val) => acc + val, '');
 }
 
+export function convertBinaryAvailtoHex(cellValues: number[]): string {
+  const hexDigits = '0123456789ABCDEF';
+
+  // Ensure the cellValues array is 1x48
+  if (cellValues.length !== 48) {
+    console.log('Invalid cellValues array dimensions. Expected 4x24 array.');
+  }
+
+  // grab 4 bits at a time and convert to hex
+  const hexString = cellValues.map((val, idx) => {
+    if (idx % 4 === 0) {
+      const decimalValue = parseInt(cellValues.slice(idx, idx + 4).join(''), 2);
+      return hexDigits[decimalValue];
+    }
+    return '';
+  }).join('');
+
+  // Ensure the resulting hex string is of the correct length
+  if (hexString.length !== 12) {
+    throw new Error('The resulting hex string does not have the correct length of 24.');
+  }
+
+  return hexString;
+}
+
 // REQUIRES: index is the index of the bit in the availability bitstring
 //           the availability bitstring is a string of 0s and 1s and is in UTC time
 // EFFECT: maps the availability of a coach from the bitstring format to the corresponding time in 12-hour Local time

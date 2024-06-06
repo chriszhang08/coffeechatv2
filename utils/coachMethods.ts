@@ -4,7 +4,7 @@ import {Comment} from '@/types/firestore/coaches/comments/comment';
 import {db, storage} from '@/firebase.config';
 import {getFirestoreDoc} from '@/utils/firestoreAnalytics';
 import {getDownloadURL, ref} from "@firebase/storage";
-import {convertHextoAvailArray} from "@/utils/dateMethods";
+import {convertBinaryAvailtoHex, convertHextoAvailArray, datetimeToIndex} from "@/utils/dateMethods";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -54,15 +54,39 @@ export async function updateCoachAvailability(
     return;
   }
 
-  const startDate = new Date(2024, 5, 7);
-  const endDate = new Date(2024, 5, 16);
+  const startIndex = datetimeToIndex(new Date(2024, 5, 7));
+  const endIndex = datetimeToIndex(new Date(2024, 5, 17)); // + 1 day because of utc overflow
 
   // Goal is to overwrite the availability array in between the start and end date
 
   // first, create a new array with the new availability
-
+  //     1. turn the 1x480 array into a 10x48 array
+  let firstarr = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  let newarr = [];
+  let utcchar = null;
+  for (let i = 0; i < 10; i++) {
+    console.log(i);
+    const cstbinaryavail = firstarr.slice(i * 48, (i + 1) * 48);
+    // convert the binary availability to hex
+    const csthexstr = convertBinaryAvailtoHex(cstbinaryavail);
+    console.log(csthexstr);
+    // combine '0000000000000' with the first 11 characters of the hex string
+    let injectionstr = '0000000000000' + csthexstr.slice(0, 11);
+    if (utcchar) {
+      // if there is a utc shift character, add it to the injection string
+      injectionstr = utcchar + injectionstr.slice(1);
+    }
+    // save the last character of the hex string as the utc shift character
+    utcchar = csthexstr[11];
+    // add the injection to the new array
+    newarr.push(injectionstr);
+  }
+  // add the utc shift character to the new array
+  newarr.push(utcchar + '00000000000000000000000');
   // then overwrite the availability array passed in with the new availability array
-
+  for (let i = startIndex; i < endIndex + 1; i++) {
+    availability[i] = newarr[i - startIndex];
+  }
   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
 }
 
