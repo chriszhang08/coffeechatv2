@@ -70,10 +70,10 @@ export async function getResumeFromStorage(coachId : string): Promise<string | n
   }
 }
 
-export async function getFiveCoaches(): Promise<Coach[]> {
+export async function getCoaches(): Promise<Coach[]> {
   const coaches: Coach[] = [];
   const collectionRef = collection(db, 'coaches');
-  const q = query(collectionRef, limit(5));
+  const q = query(collectionRef, limit(10));
   const snapshot = await getDocs(q);
 
   snapshot.forEach(doc => {

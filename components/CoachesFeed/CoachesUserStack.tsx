@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {Center, Flex, SimpleGrid, Table} from '@mantine/core';
 import fakePeople from '@/data/mock-data/fakePeople';
 import {ProfileBadgeSnapshot} from '@/components/ProfilePage/ProfileBadge/ProfileBadgeSnapshot';
-import {useGetFiveCoaches} from '@/hooks/useCoachData';
+import {useGetCoaches} from '@/hooks/useCoachData';
 
 export function CoachesUserStack() {
   const [sortBy, setSortBy] = useState('default');
@@ -25,7 +25,7 @@ export function CoachesUserStack() {
     setTagsShow(tags);
   };
 
-  const coaches = useGetFiveCoaches();
+  const coaches = useGetCoaches();
 
   const filteredCoaches =
     !coaches
