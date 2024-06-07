@@ -117,7 +117,7 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
     };
 
     try {
-      cacheSessionData(sessionData);
+      cacheSessionData(sessionData, coachData?.availability);
       oauthSignIn();
       const sessionId = await createSession(sessionData);
     } catch (e) {

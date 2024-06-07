@@ -15,7 +15,7 @@ function isSameDay(date1: Date, date2: Date): boolean {
 
 // Filter the availability based on the type of session
 function filterAvailability(availability: number[], typeofSession: string | null, selectedDate: Date): number[] {
-  let lengthOfSession = 1;
+  let lengthOfSession = 2;
   // resume session is 15 min long, interview session is 45 min long, and the default session is 15 min long
   if (typeofSession === 'resume') {
     lengthOfSession = 1;

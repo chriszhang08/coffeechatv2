@@ -60,9 +60,9 @@ function CoachProfileSearch() {
 function Page() {
   return (
     <div className='paddingContainer'>
-      <Link href={'/'}>
-        <img src="/logo.svg" alt="Logo" className="logo" />
-      </Link>
+      {/*<Link href={'/'}>*/}
+      {/*  <img src="/logo.svg" alt="Logo" className="logo" />*/}
+      {/*</Link>*/}
       <Suspense fallback={<div>Loading...</div>}>
         <CoachProfileSearch />
       </Suspense>
