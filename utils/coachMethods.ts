@@ -4,6 +4,7 @@ import {Comment} from '@/types/firestore/coaches/comments/comment';
 import {db, storage} from '@/firebase.config';
 import {getFirestoreDoc} from '@/utils/firestoreAnalytics';
 import {getDownloadURL, ref} from "@firebase/storage";
+import {bitStringToHexStr, datetimeToIndex, hexStrToBitString} from "@/utils/dateMethods";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -59,6 +60,31 @@ export async function updateCoachProfileValues(
     return setDoc(coachRef, updatedProfileValues, { merge: true });
   }
   return setDoc(doc(db, 'coaches', coachId), profileValues, { merge: true });
+}
+
+export async function blockCoachAvailability(
+  coachId: string | null,
+  date: Date,
+  availability: string[],
+): Promise<void> {
+  if (!coachId) {
+    return;
+  }
+  const hourIndex = date.getUTCHours();
+  const strIndex = hourIndex * 4 + Math.floor(date.getMinutes() / 15);
+  const dayIndex = datetimeToIndex(date);
+
+  let dayStrAvailability = availability[dayIndex];
+  // convert hourStrAvailability from a hex char to a bit str
+  let hourAvailability = hexStrToBitString(dayStrAvailability);
+  // flip the bit at the index
+  hourAvailability = hourAvailability.substring(0, strIndex) + '00' + hourAvailability.substring(strIndex + 2);
+  // convert back to hex
+  dayStrAvailability = bitStringToHexStr(hourAvailability);
+
+  availability[dayIndex] = dayStrAvailability;
+
+  return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
 }
 
 export async function getResumeFromStorage(coachId : string): Promise<string | null> {

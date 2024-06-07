@@ -16,6 +16,8 @@ import {Session} from "@/types/firestore/sessions/session";
 import {SuccessComponent} from "@/components/StatusComponents/SuccessComponent";
 import {ErrorComponent} from "@/components/StatusComponents/ErrorComponent";
 import Link from "next/link";
+import {blockCoachAvailability, updateCoachAvailability} from "@/utils/coachMethods";
+import {useMutation} from "@tanstack/react-query";
 
 // Whoever authenticates the google account is the organizer, need to pass the session object details into the authentication page
 const passToken = async (accessToken: string, sessionObj: Partial<Session>) => {
@@ -28,7 +30,7 @@ const passToken = async (accessToken: string, sessionObj: Partial<Session>) => {
   });
 }
 
-async function SessionDetailsParams() {
+function SessionDetailsParams() {
   const [hash, setHash] = useHash();
   const [isLoading, setIsLoading] = useState(true);
   const [apiStatus, setApiStatus] = useState<String | null>(null); // null | 'success' | 'error'
@@ -38,8 +40,14 @@ async function SessionDetailsParams() {
   const tokenType = params.get('token_type');
   const expiresIn = params.get('expires_in');
 
+  const mutation = useMutation({
+    mutationFn: (sessionData : any) =>
+      blockCoachAvailability(sessionData.coachId, new Date(sessionData.date), sessionData.availability),
+  });
+
   useEffect(() => {
     setIsLoading(true);
+
     if (!accessToken) {
       return
     }
@@ -48,6 +56,7 @@ async function SessionDetailsParams() {
       passToken(accessToken, sessionData).then((response) => {
         if (response.ok) {
           setApiStatus('success');
+          mutation.mutate(sessionData);
         } else {
           console.log('Error in sending email', response.status, response.statusText)
           setApiStatus('error');
