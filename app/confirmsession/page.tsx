@@ -16,6 +16,7 @@ import {Session} from "@/types/firestore/sessions/session";
 import {SuccessComponent} from "@/components/StatusComponents/SuccessComponent";
 import {ErrorComponent} from "@/components/StatusComponents/ErrorComponent";
 import Link from "next/link";
+import {blockCoachAvailability} from "@/utils/coachMethods";
 
 // Whoever authenticates the google account is the organizer, need to pass the session object details into the authentication page
 const passToken = async (accessToken: string, sessionObj: Partial<Session>) => {
@@ -48,6 +49,7 @@ async function SessionDetailsParams() {
       passToken(accessToken, sessionData).then((response) => {
         if (response.ok) {
           setApiStatus('success');
+          // blockCoachAvailability(sessionData.cidAuth, sessionData.datetimeString, sessionData.availability);
         } else {
           console.log('Error in sending email', response.status, response.statusText)
           setApiStatus('error');
