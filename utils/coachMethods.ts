@@ -4,7 +4,7 @@ import {Comment} from '@/types/firestore/coaches/comments/comment';
 import {db, storage} from '@/firebase.config';
 import {getFirestoreDoc} from '@/utils/firestoreAnalytics';
 import {getDownloadURL, ref} from "@firebase/storage";
-import {datetimeToIndex} from "@/utils/dateMethods";
+import {bitStringToHexStr, datetimeToIndex, hexStrToBitString} from "@/utils/dateMethods";
 
 export async function getPublicCoachData(
   coachId: string | null,
@@ -62,33 +62,30 @@ export async function updateCoachProfileValues(
   return setDoc(doc(db, 'coaches', coachId), profileValues, { merge: true });
 }
 
-// export async function blockCoachAvailability(
-//   coachId: string | null,
-//   date: Date,
-//   availability: string[],
-// ): Promise<void> {
-//   if (!coachId) {
-//     return;
-//   }
-//   const hourIndex = date.getHours();
-//   const strIndex = hourIndex + date.getMinutes() / 15;
-//   console.log('strIndex:', strIndex);
-//   const dayIndex = datetimeToIndex(date);
-//   const docRef = doc(db, 'coaches', coachId);
-//
-//   console.log('availability:', availability);
-//   let dayStrAvailability = availability[dayIndex];
-//   // convert hourStrAvailability from a hex char to a bit str
-//   let hourAvailability = parseInt(dayStrAvailability, 16).toString(2);
-//   // flip the bit at the index
-//   hourAvailability = hourAvailability.substring(0, strIndex) + '00' + hourAvailability.substring(strIndex + 2);
-//   // convert back to hex
-//   dayStrAvailability = parseInt(hourAvailability, 2).toString(16);
-//   console.log('dayStrAvailability:', dayStrAvailability);
-//   availability[dayIndex] = dayStrAvailability;
-//
-//   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
-// }
+export async function blockCoachAvailability(
+  coachId: string | null,
+  date: Date,
+  availability: string[],
+): Promise<void> {
+  if (!coachId) {
+    return;
+  }
+  const hourIndex = date.getUTCHours();
+  const strIndex = hourIndex * 4 + Math.floor(date.getMinutes() / 15);
+  const dayIndex = datetimeToIndex(date);
+
+  let dayStrAvailability = availability[dayIndex];
+  // convert hourStrAvailability from a hex char to a bit str
+  let hourAvailability = hexStrToBitString(dayStrAvailability);
+  // flip the bit at the index
+  hourAvailability = hourAvailability.substring(0, strIndex) + '00' + hourAvailability.substring(strIndex + 2);
+  // convert back to hex
+  dayStrAvailability = bitStringToHexStr(hourAvailability);
+
+  availability[dayIndex] = dayStrAvailability;
+
+  return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
+}
 
 export async function getResumeFromStorage(coachId : string): Promise<string | null> {
   try {

@@ -8,8 +8,8 @@ import Providers from "./providers";
 import InitAppCheck from "@/app/InitAppCheck";
 
 export const metadata = {
-  title: "Mantine Next.js template",
-  description: "I am using Mantine with Next.js!",
+  title: "MentorMeets",
+  description: "Transforming mentorship by University of Michigan seniors.",
 };
 
 export default function RootLayout({ children }: { children: any }) {

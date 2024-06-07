@@ -3,6 +3,32 @@
 // This will ensure that the date and time displayed to the user is accurate.
 
 
+export function bitStringToHexStr(bitString: string): string {
+  // Check if bitString is empty or contains characters other than '0' or '1'
+  if (bitString === "" || !/^[01]+$/.test(bitString)) {
+    throw new Error("Input is not a valid bit string.");
+  }
+  // Check that the bit string has 4x24 = 96 bits
+  if (bitString.length !== 96) {
+    throw new Error("Input bit string is not of the correct length 96.");
+  }
+  // Parse the bit string to a numeric value and convert it to a hex string
+  const hexString: string = parseInt(bitString, 2).toString(16);
+  // Pad the hex string with leading zeros to ensure it has 24 characters
+  return hexString.padStart(24, '0');
+}
+
+export function hexStrToBitString(hexStr: string): string {
+  // Check if hexStr is empty or contains characters other than '0' to '9' or 'a' to 'f'
+  if (hexStr === "" || !/^[0-9A-Fa-f]+$/.test(hexStr)) {
+    throw new Error("Input is not a valid hex string.");
+  }
+  // Parse the hex string to a numeric value and convert it to a bit string
+  const bitString: string = parseInt(hexStr, 16).toString(2);
+  // Pad the bit string with leading zeros to ensure it has 96 bits
+  return bitString.padStart(96, '0');
+}
+
 export function formatUTCDate(date: Date) {
   let str = date.toUTCString();
 }

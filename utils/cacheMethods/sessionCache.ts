@@ -1,7 +1,7 @@
 // Save data to localStorage
 import {Session} from "@/types/firestore/sessions/session";
 
-export function cacheSessionData(sessionData : Partial<Session>, availability: string[]) {
+export function cacheSessionData(sessionData : Partial<Session>, availability: string[] | undefined) {
   try {
     const serializedData = JSON.stringify({...sessionData, availability});
     localStorage.setItem('sessionData', serializedData);

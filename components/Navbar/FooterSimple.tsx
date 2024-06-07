@@ -2,6 +2,7 @@ import { Container, Group, Anchor } from '@mantine/core';
 import classes from './FooterSimple.module.css';
 
 const links = [
+  { link: '/', label: 'Home' },
   { link: '/privacypolicy', label: 'Privacy' },
 ];
 
