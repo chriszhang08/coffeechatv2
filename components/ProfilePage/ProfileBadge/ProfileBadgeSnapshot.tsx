@@ -36,7 +36,7 @@ export function ProfileBadgeSnapshot({
             {person?.numSessions} reviews
           </Text> */}
         </Group>
-        <Text fz="sm" mt="xs">
+        <Text fz="sm" mt="xs" lineClamp={4}>
           {person?.bio}
         </Text>
       </Card.Section>

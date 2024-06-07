@@ -5,6 +5,7 @@ import {Center, Flex, SimpleGrid, Table} from '@mantine/core';
 import fakePeople from '@/data/mock-data/fakePeople';
 import {ProfileBadgeSnapshot} from '@/components/ProfilePage/ProfileBadge/ProfileBadgeSnapshot';
 import {useGetCoaches} from '@/hooks/useCoachData';
+import { useMediaQuery } from '@mantine/hooks';
 
 export function CoachesUserStack() {
   const [sortBy, setSortBy] = useState('default');
@@ -26,7 +27,7 @@ export function CoachesUserStack() {
   };
 
   const coaches = useGetCoaches();
-
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const filteredCoaches =
     !coaches
       ? []
@@ -59,7 +60,7 @@ export function CoachesUserStack() {
 
   return (
     <Center>
-      <SimpleGrid cols={3} style={{paddingTop: 20}} spacing={"xl"}>
+      <SimpleGrid cols={isMobile ? 1 : 3} style={{paddingTop: 20}} spacing={"xl"}>
         {/* <Flex style={{paddingTop: 20}} justify={"space-around"}> */}
           {rows}
         {/* </Flex> */}
