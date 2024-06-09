@@ -152,10 +152,10 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
             {getPrice(type, coach)}
           </Text>
           <Title order={5}>Meeting Link:</Title>
-          <a href={coach?.link}>{coach?.link}</a>
-          {/*<Alert variant="light" color="blue" icon={icon}>*/}
-          {/*  The Google Meet link will be generated after the coach confirms the session.*/}
-          {/*</Alert>*/}
+          {/*<a href={coach?.link}>{coach?.link}</a>*/}
+          <Alert variant="light" color="blue" icon={icon}>
+            The Google Meet link will be generated after the coach confirms the session.
+          </Alert>
         </Card>
 
         <Container style={{width: 300}}>
