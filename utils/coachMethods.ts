@@ -81,7 +81,7 @@ export async function blockCoachAvailability(
   let hourAvailability = hexStrToBitString(threedayStrAvailability);
   // flip the bit at the index
   // TODO make it so that the bit flip is dynamic based on length of session
-  hourAvailability = hourAvailability.substring(0, strIndex) + '00' + hourAvailability.substring(strIndex + 2);
+  hourAvailability = hourAvailability.substring(0, strIndex - 1) + '000' + hourAvailability.substring(strIndex + 2);
   // convert back to hex
   threedayStrAvailability = bitStringToHexStr(hourAvailability);
 
