@@ -15,6 +15,18 @@
 }
 }
 
+.logo {
+    width: 50px; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    order: 2; /* Ensure logo is on the opposite side */
+    margin-left: auto; /* Push the logo to the end in flexbox */
+
+@media (max-width: var(--mantine-breakpoint-xs)) {
+    margin-left: 0;
+    margin-top: var(--mantine-spacing-md);
+}
+}
+
 .links {
 @media (max-width: $mantine-breakpoint-xs) {
     margin-top: var(--mantine-spacing-md);

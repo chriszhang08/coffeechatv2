@@ -17,7 +17,7 @@ function getEndTime(date: string, sessionDetails: string) : string {
   const dateObj = new Date(date);
   let duration;
   if (sessionDetails === 'resume') {
-    duration = 15;
+    duration = 30;
   } else if (sessionDetails === 'interview') {
     duration = 45;
   } else {

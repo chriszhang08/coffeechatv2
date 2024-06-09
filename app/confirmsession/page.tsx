@@ -2,13 +2,6 @@
 
 import {useSearchParams} from 'next/navigation';
 import React, {Suspense, useEffect, useState} from 'react';
-import {HeaderSearch} from '@/components/Navbar/Header';
-import SessionDetails from "@/components/ProfilePage/ConfirmSessionForm/SessionDetails";
-import {Coach} from "@/types/firestore/coaches/coach";
-import {usePublicCoachData} from "@/hooks/useCoachData";
-import CoachProfileCard from "@/components/CoachesFeed/CoachProfileCard";
-import {ProfileBadgeSnapshot} from "@/components/ProfilePage/ProfileBadge/ProfileBadgeSnapshot";
-import ProfileBadge from "@/components/ProfilePage/ProfileBadge/ProfileBadge";
 import {useHash} from "@mantine/hooks";
 import {useRouter} from "next/navigation";
 import {clearCachedSessionData, loadCachedSessionData} from "@/utils/cacheMethods/sessionCache";
@@ -55,8 +48,8 @@ function SessionDetailsParams() {
       const sessionData = loadCachedSessionData();
       passToken(accessToken, sessionData).then((response) => {
         if (response.ok) {
-          setApiStatus('success');
           mutation.mutate(sessionData);
+          setApiStatus('success');
         } else {
           console.log('Error in sending email', response.status, response.statusText)
           setApiStatus('error');

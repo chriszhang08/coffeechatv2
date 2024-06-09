@@ -3,6 +3,7 @@ import classes from './FooterSimple.module.css';
 
 const links = [
   { link: '/', label: 'Home' },
+  { link: '/about', label: 'About' },
   { link: '/privacypolicy', label: 'Privacy' },
 ];
 
@@ -22,6 +23,7 @@ export function FooterSimple() {
     <div className={classes.footer}>
       <Container className={classes.inner}>
         <Group className={classes.links}>{items}</Group>
+        <img src='/logo.svg' className={classes.logo}></img>
       </Container>
     </div>
   );

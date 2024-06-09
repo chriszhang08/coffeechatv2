@@ -70,19 +70,26 @@ export async function blockCoachAvailability(
   if (!coachId) {
     return;
   }
-  const hourIndex = date.getUTCHours();
-  const strIndex = hourIndex * 4 + Math.floor(date.getMinutes() / 15);
+  const localeHour = date.getHours();
+  const localeIndex = 96 + localeHour * 4 + Math.floor(date.getMinutes() / 15);
+  // shift the index by the timezone offest
+  const strIndex = localeIndex + Math.floor(date.getTimezoneOffset() / 15);
   const dayIndex = datetimeToIndex(date);
 
-  let dayStrAvailability = availability[dayIndex];
+  let threedayStrAvailability = availability[dayIndex - 1].concat(availability[dayIndex], availability[dayIndex + 1]);
   // convert hourStrAvailability from a hex char to a bit str
-  let hourAvailability = hexStrToBitString(dayStrAvailability);
+  let hourAvailability = hexStrToBitString(threedayStrAvailability);
   // flip the bit at the index
+  // TODO make it so that the bit flip is dynamic based on length of session
   hourAvailability = hourAvailability.substring(0, strIndex) + '00' + hourAvailability.substring(strIndex + 2);
   // convert back to hex
-  dayStrAvailability = bitStringToHexStr(hourAvailability);
+  threedayStrAvailability = bitStringToHexStr(hourAvailability);
 
-  availability[dayIndex] = dayStrAvailability;
+
+  // split the dayStrAvailability back into 3 days
+  availability[dayIndex - 1] = threedayStrAvailability.substring(0, 24);
+  availability[dayIndex] = threedayStrAvailability.substring(24, 48);
+  availability[dayIndex + 1] = threedayStrAvailability.substring(48, 72);
 
   return setDoc(doc(db, 'coaches', coachId), { availability }, { merge: true });
 }
