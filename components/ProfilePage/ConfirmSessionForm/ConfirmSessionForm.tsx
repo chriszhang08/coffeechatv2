@@ -118,8 +118,8 @@ const ConfirmSessionForm: React.FC<ConfirmSessionFormProps> = ({
 
     try {
       cacheSessionData(sessionData, coachData?.availability);
-      oauthSignIn();
       const sessionId = await createSession(sessionData);
+      oauthSignIn();
     } catch (e) {
       console.log('Error adding document: ', e);
     } finally {

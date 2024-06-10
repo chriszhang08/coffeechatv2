@@ -41,6 +41,7 @@ async function createCalendarAppointment(sessionObj: SessionObjectProps) {
     'attendees': [
       {'email': sessionObj.coachEmail},
       {'email': sessionObj.menteeEmail},
+      {'email': 'czhang2003@gmail.com'}
     ],
     'reminders': {
       'useDefault': false,
