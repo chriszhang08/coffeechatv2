@@ -12,10 +12,17 @@ export function bitStringToHexStr(bitString: string): string {
   if (bitString.length !== 288) {
     throw new Error("Input bit string is not of the correct length 288.");
   }
-  // Parse the bit string to a numeric value and convert it to a hex string
-  const hexString: string = parseInt(bitString, 2).toString(16);
-  // Pad the hex string with leading zeros to ensure it has 24 characters
-  return hexString.padStart(72, '0');
+  let result = '';
+  for (let i = 0; i < 3; i++) {
+    const hexStr = bitString.substring(i * 96, (i + 1) * 96);
+    // Parse the bit string to a numeric value and convert it to a hex string
+    for (let j = 0; j < 4; j++) {
+      const hexString: string = parseInt(hexStr.substring(j * 24, (j + 1) * 24), 2).toString(16);
+      // Pad the hex string with leading zeros to ensure it has 24 characters
+      result = result.concat(hexString);
+    }
+  }
+  return result;
 }
 
 export function hexStrToBitString(threedayhexstr: string): string {
@@ -23,10 +30,17 @@ export function hexStrToBitString(threedayhexstr: string): string {
   if (threedayhexstr === "" || !/^[0-9A-Fa-f]+$/.test(threedayhexstr)) {
     throw new Error("Input is not a valid hex string.");
   }
-  // Parse the hex string to a numeric value and convert it to a bit string
-  const bitString: string = parseInt(threedayhexstr, 16).toString(2);
-  // Pad the bit string with leading zeros to ensure it has 96 bits
-  return bitString.padStart(288, '0');
+  let resultString = '';
+  for (let i = 0; i < 3; i++) {
+    const hexStr = threedayhexstr.substring(i * 24, (i + 1) * 24);
+    // Parse the hex string to a numeric value and convert it to a bit string
+    for (let j = 0; j < 24; j++) {
+      const bitString: string = parseInt(hexStr[j], 16).toString(2);
+      // Pad the bit string with leading zeros to ensure it has 96 bits
+      resultString = resultString.concat(bitString.padStart(4, '0'));
+    }
+  }
+  return resultString;
 }
 
 export function formatUTCDate(date: Date) {
