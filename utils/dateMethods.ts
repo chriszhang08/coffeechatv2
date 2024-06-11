@@ -16,8 +16,8 @@ export function bitStringToHexStr(bitString: string): string {
   for (let i = 0; i < 3; i++) {
     const hexStr = bitString.substring(i * 96, (i + 1) * 96);
     // Parse the bit string to a numeric value and convert it to a hex string
-    for (let j = 0; j < 4; j++) {
-      const hexString: string = parseInt(hexStr.substring(j * 24, (j + 1) * 24), 2).toString(16);
+    for (let j = 0; j < 24; j++) {
+      const hexString: string = parseInt(hexStr.substring(j * 4, (j + 1) * 4), 2).toString(16);
       // Pad the hex string with leading zeros to ensure it has 24 characters
       result = result.concat(hexString);
     }
